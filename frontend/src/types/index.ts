@@ -20,3 +20,17 @@ export interface ChatMessage {
   content: string
   sources?: Source[]
 }
+
+export interface CorpsHistoryEntry {
+  corps: string
+  year: string
+}
+
+export interface UserProfile {
+  name: string
+  instruments: string[]
+  age: string
+  experience: 'first-time' | 'experienced'
+  corpsHistory: CorpsHistoryEntry[]
+  states: string[]
+}
