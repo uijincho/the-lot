@@ -14,8 +14,8 @@ export default function MessageBubble({ message }: Props) {
         <div
           className={`px-4 py-3 rounded-2xl text-sm leading-relaxed ${
             isUser
-              ? 'bg-brand-gold text-black font-medium rounded-br-sm'
-              : 'bg-brand-surface border border-brand-border text-gray-100 rounded-bl-sm'
+              ? 'bg-accent text-accent-text font-medium rounded-br-sm'
+              : 'bg-surface border border-border text-text rounded-bl-sm'
           }`}
         >
           {isUser ? (
@@ -24,18 +24,18 @@ export default function MessageBubble({ message }: Props) {
             <ReactMarkdown
               components={{
                 p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
-                strong: ({ children }) => <strong className="font-semibold text-white">{children}</strong>,
+                strong: ({ children }) => <strong className="font-semibold text-text">{children}</strong>,
                 em: ({ children }) => <em className="italic">{children}</em>,
                 ul: ({ children }) => <ul className="list-disc list-inside mb-2 space-y-0.5">{children}</ul>,
                 ol: ({ children }) => <ol className="list-decimal list-inside mb-2 space-y-0.5">{children}</ol>,
-                li: ({ children }) => <li className="text-gray-200">{children}</li>,
-                h1: ({ children }) => <h1 className="text-base font-bold text-white mb-1 mt-2">{children}</h1>,
-                h2: ({ children }) => <h2 className="text-sm font-bold text-white mb-1 mt-2">{children}</h2>,
-                h3: ({ children }) => <h3 className="text-sm font-semibold text-brand-gold mb-1 mt-2">{children}</h3>,
-                code: ({ children }) => <code className="bg-brand-dark rounded px-1 py-0.5 text-xs font-mono text-brand-gold">{children}</code>,
-                pre: ({ children }) => <pre className="bg-brand-dark border border-brand-border rounded-lg p-3 overflow-x-auto text-xs font-mono mb-2">{children}</pre>,
-                blockquote: ({ children }) => <blockquote className="border-l-2 border-brand-gold pl-3 text-gray-400 italic mb-2">{children}</blockquote>,
-                hr: () => <hr className="border-brand-border my-2" />,
+                li: ({ children }) => <li className="text-text">{children}</li>,
+                h1: ({ children }) => <h1 className="text-base font-display font-bold text-text mb-1 mt-2">{children}</h1>,
+                h2: ({ children }) => <h2 className="text-sm font-display font-bold text-text mb-1 mt-2">{children}</h2>,
+                h3: ({ children }) => <h3 className="text-sm font-display font-semibold text-accent mb-1 mt-2">{children}</h3>,
+                code: ({ children }) => <code className="bg-bg rounded px-1 py-0.5 text-xs font-mono text-accent">{children}</code>,
+                pre: ({ children }) => <pre className="bg-bg border border-border rounded-lg p-3 overflow-x-auto text-xs font-mono mb-2">{children}</pre>,
+                blockquote: ({ children }) => <blockquote className="border-l-2 border-accent pl-3 text-text-dim italic mb-2">{children}</blockquote>,
+                hr: () => <hr className="yard-rule my-3 border-0" />,
               }}
             >
               {message.content}
@@ -45,13 +45,13 @@ export default function MessageBubble({ message }: Props) {
 
         {message.sources && message.sources.length > 0 && (
           <div className="w-full space-y-1">
-            <p className="text-xs text-gray-500 px-1">Sources</p>
+            <p className="text-xs text-text-dim px-1">Sources</p>
             {message.sources.map((source, i) => (
               <div
                 key={i}
-                className="bg-brand-dark border border-brand-border rounded-lg px-3 py-2 text-xs text-gray-400"
+                className="bg-bg border border-border rounded-lg px-3 py-2 text-xs text-text-dim"
               >
-                <span className="text-gray-300 font-medium">{source.filename}</span>
+                <span className="text-text font-mono font-medium">{source.filename}</span>
                 <p className="mt-0.5 line-clamp-2">{source.text_snippet}</p>
               </div>
             ))}

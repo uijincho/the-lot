@@ -31,7 +31,7 @@ export interface UserProfile {
   name: string
   instruments: string[]
   age: string
-  experience: 'first-time' | 'experienced'
+  experience: 'rookie' | 'experienced'
   corpsHistory: CorpsHistoryEntry[]
   states: string[]
 }

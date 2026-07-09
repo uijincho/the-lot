@@ -27,10 +27,10 @@ export default function Chat() {
   }
 
   return (
-    <div className="flex flex-col h-[calc(100vh-10rem)] bg-brand-dark rounded-2xl border border-brand-border overflow-hidden">
-      <div className="px-6 py-4 border-b border-brand-border">
-        <h1 className="text-lg font-bold text-white">Ask Lucas</h1>
-        <p className="text-gray-500 text-sm">Powered by your ingested audition documents</p>
+    <div className="flex flex-col h-[calc(100vh-10rem)] bg-bg rounded-2xl border border-border overflow-hidden">
+      <div className="px-6 py-4 border-b border-border">
+        <h1 className="text-lg font-display font-bold text-text">Ask Lucas</h1>
+        <p className="text-text-dim text-sm">Your DCI audition assistant</p>
       </div>
 
       <MessageList messages={messages} loading={loading} />

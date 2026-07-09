@@ -14,15 +14,15 @@ export default function CorpsCard({ corps }: Props) {
     : 'TBA'
 
   return (
-    <div className="bg-brand-surface border border-brand-border rounded-xl p-6 flex flex-col gap-4 hover:border-brand-gold transition-colors">
+    <div className="bg-surface border border-border rounded-xl p-6 flex flex-col gap-4 hover:border-accent transition-colors">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h2 className="text-lg font-bold text-white">{corps.name}</h2>
+          <h2 className="text-lg font-display font-bold text-text">{corps.name}</h2>
           {corps.corps_class && (
             <span className={`text-xs font-semibold px-2 py-0.5 rounded-full mt-1 inline-block ${
               corps.corps_class === 'Open'
-                ? 'bg-blue-900/40 text-blue-300 border border-blue-700'
-                : 'bg-brand-gold/10 text-brand-gold border border-brand-gold/30'
+                ? 'bg-structure-soft text-structure border border-structure-line'
+                : 'bg-accent-soft text-accent border border-accent'
             }`}>
               {corps.corps_class} Class
             </span>
@@ -33,7 +33,7 @@ export default function CorpsCard({ corps }: Props) {
             href={corps.website_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs text-brand-gold hover:underline shrink-0"
+            className="text-xs text-accent hover:underline shrink-0"
           >
             🔗
           </a>
@@ -42,40 +42,18 @@ export default function CorpsCard({ corps }: Props) {
 
       <div className="grid grid-cols-2 gap-3 text-sm">
         <div>
-          <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">Home Base</p>
-          <p className="text-gray-200">{corps.location ?? '—'}</p>
+          <p className="text-text-dim text-xs uppercase tracking-wider mb-1 font-mono">Home Base</p>
+          <p className="text-text">{corps.location ?? '—'}</p>
         </div>
         <div>
-          <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">Audition Date</p>
-          <p className="text-brand-gold font-semibold">{formattedDate}</p>
+          <p className="text-text-dim text-xs uppercase tracking-wider mb-1 font-mono">Audition Date</p>
+          <p className="text-accent font-mono font-semibold">{formattedDate}</p>
         </div>
         <div className="col-span-2">
-          <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">Audition Location</p>
-          <p className="text-gray-200">{corps.audition_location ?? '—'}</p>
+          <p className="text-text-dim text-xs uppercase tracking-wider mb-1 font-mono">Audition Location</p>
+          <p className="text-text">{corps.audition_location ?? '—'}</p>
         </div>
       </div>
-
-      {/* {corps.instruments && corps.instruments.length > 0 && (
-        <div>
-          <p className="text-gray-500 text-xs uppercase tracking-wider mb-2">Sections</p>
-          <div className="flex flex-wrap gap-1.5">
-            {corps.instruments.map((inst) => (
-              <span
-                key={inst}
-                className="text-xs bg-brand-dark border border-brand-border text-gray-300 px-2 py-0.5 rounded-full"
-              >
-                {inst}
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {corps.requirements && (
-        <p className="text-xs text-gray-400 leading-relaxed border-t border-brand-border pt-4">
-          {corps.requirements}
-        </p>
-      )} */}
     </div>
   )
 }

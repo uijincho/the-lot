@@ -19,10 +19,7 @@ export default function MessageList({ messages, loading }: Props) {
       {messages.length === 0 && (
         <div className="flex flex-col items-center justify-center h-full text-center gap-3 py-16">
           <p className="text-4xl">🥁</p>
-          <p className="text-gray-300 font-semibold">Ask anything about DCI auditions</p>
-          <p className="text-gray-500 text-sm max-w-sm">
-            Upload corps audition documents first, then ask about requirements, dates, repertoire, and more.
-          </p>
+          <p className="text-text font-semibold">Ask anything about DCI auditions</p>
         </div>
       )}
       {messages.map((msg, i) => (
@@ -30,10 +27,10 @@ export default function MessageList({ messages, loading }: Props) {
       ))}
       {loading && (
         <div className="flex justify-start">
-          <div className="bg-brand-surface border border-brand-border rounded-2xl rounded-bl-sm px-4 py-3 flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce [animation-delay:0ms]" />
-            <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce [animation-delay:150ms]" />
-            <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce [animation-delay:300ms]" />
+          <div className="bg-surface border border-border rounded-2xl rounded-bl-sm px-4 py-3 flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 bg-text-dim rounded-full animate-bounce [animation-delay:0ms]" />
+            <span className="w-1.5 h-1.5 bg-text-dim rounded-full animate-bounce [animation-delay:150ms]" />
+            <span className="w-1.5 h-1.5 bg-text-dim rounded-full animate-bounce [animation-delay:300ms]" />
           </div>
         </div>
       )}
