@@ -4,17 +4,30 @@ export default {
   content: ['./index.html', './src/**/*.{ts,tsx}'],
   theme: {
     extend: {
-      colors: {
-        brand: {
-          gold: '#F5A623',
-          red: '#C0392B',
-          dark: '#0D0D0D',
-          surface: '#1A1A1A',
-          border: '#2A2A2A',
-        },
-      },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
+        display: ['"Space Grotesk"', 'system-ui', 'sans-serif'],
+        body:    ['Inter', 'system-ui', 'sans-serif'],
+        mono:    ['"IBM Plex Mono"', 'ui-monospace', 'monospace'],
+      },
+      colors: {
+        bg:           'var(--bg)',
+        'bg-elevated':'var(--bg-elevated)',
+        surface:      'var(--surface)',
+        'surface-2':  'var(--surface-2)',
+        text:         'var(--text)',
+        'text-dim':   'var(--text-dim)',
+        border:       'var(--border)',
+        structure: {
+          DEFAULT: 'var(--structure)',
+          line:    'var(--structure-line)',
+          soft:    'var(--structure-soft)',
+        },
+        accent: {
+          DEFAULT: 'var(--accent)',
+          text:    'var(--accent-text)',
+          soft:    'var(--accent-soft)',
+          muted:   'var(--accent-muted)',
+        },
       },
     },
   },

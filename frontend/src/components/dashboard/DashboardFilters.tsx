@@ -3,6 +3,7 @@ import { STATE_NAMES } from '../profile/ProfileForm'
 import type { Corps } from '../../types'
 
 export type ClassFilter = 'all' | 'World' | 'Open'
+export type ViewMode = 'card' | 'list'
 
 interface Props {
   corps: Corps[]
@@ -14,6 +15,8 @@ interface Props {
   onToggleState: (code: string) => void
   onClearStates: () => void
   hasRecommended: boolean
+  viewMode: ViewMode
+  onViewMode: (m: ViewMode) => void
 }
 
 const TOP_N = 3
@@ -28,10 +31,11 @@ export default function DashboardFilters({
   onToggleState,
   onClearStates,
   hasRecommended,
+  viewMode,
+  onViewMode,
 }: Props) {
   const [statesExpanded, setStatesExpanded] = useState(false)
 
-  // derive state options from loaded corps
   const stateCounts = new Map<string, number>()
   corps.forEach((c) => {
     if (!c.audition_location) return
@@ -46,13 +50,11 @@ export default function DashboardFilters({
     .map(([code]) => code)
 
   const allStatesSorted = Array.from(stateCounts.keys()).sort()
-
   const stateOptions = statesExpanded ? allStatesSorted : topStates
-
   const activeCount = (filterStates.length > 0 ? 1 : 0) + (filterClass !== 'all' ? 1 : 0) + (!showRecommended ? 1 : 0)
 
   return (
-    <div className="bg-brand-surface border border-brand-border rounded-xl px-4 py-3 mb-6 flex flex-wrap items-center gap-4">
+    <div className="bg-surface border border-border rounded-xl px-4 py-3 mb-6 flex flex-wrap items-center gap-4">
       {/* Recommendations toggle */}
       {hasRecommended && (
         <button
@@ -60,12 +62,12 @@ export default function DashboardFilters({
           onClick={onToggleRecommended}
           className={`flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg border transition-colors ${
             showRecommended
-              ? 'bg-brand-gold/10 border-brand-gold text-brand-gold'
-              : 'bg-brand-dark border-brand-border text-gray-500'
+              ? 'bg-accent-soft border-accent text-accent'
+              : 'bg-bg border-border text-text-dim'
           }`}
         >
           <span>{showRecommended ? '⭐' : '☆'}</span>
-          Matches
+          Recommendations
         </button>
       )}
 
@@ -78,8 +80,8 @@ export default function DashboardFilters({
             onClick={() => onFilterClass(cls)}
             className={`text-xs font-semibold px-3 py-1.5 rounded-lg border transition-colors ${
               filterClass === cls
-                ? 'bg-brand-gold/10 border-brand-gold text-brand-gold'
-                : 'bg-brand-dark border-brand-border text-gray-500 hover:border-gray-400'
+                ? 'bg-accent-soft border-accent text-accent'
+                : 'bg-bg border-border text-text-dim hover:text-text'
             }`}
           >
             {cls === 'all' ? 'All Classes' : `${cls} Class`}
@@ -90,16 +92,16 @@ export default function DashboardFilters({
       {/* State filter */}
       {stateOptions.length > 0 && (
         <div className="flex items-center gap-1.5 flex-wrap">
-          <span className="text-xs text-gray-500 mr-0.5">States:</span>
+          <span className="text-xs text-text-dim font-mono mr-0.5">States:</span>
           {stateOptions.map((code) => (
             <button
               key={code}
               type="button"
               onClick={() => onToggleState(code)}
-              className={`text-xs font-medium px-2.5 py-1 rounded-lg border transition-colors ${
+              className={`text-xs font-mono font-medium px-2.5 py-1 rounded-lg border transition-colors ${
                 filterStates.includes(code)
-                  ? 'bg-brand-gold text-black border-brand-gold'
-                  : 'bg-brand-dark text-gray-500 border-brand-border hover:border-gray-400'
+                  ? 'bg-accent text-accent-text border-accent'
+                  : 'bg-bg text-text-dim border-border hover:text-text'
               }`}
             >
               {code}
@@ -109,7 +111,7 @@ export default function DashboardFilters({
             <button
               type="button"
               onClick={onClearStates}
-              className="text-xs text-gray-600 hover:text-gray-400 ml-1 transition-colors"
+              className="text-xs text-text-dim hover:text-text ml-1 transition-colors"
             >
               Clear
             </button>
@@ -118,7 +120,7 @@ export default function DashboardFilters({
             <button
               type="button"
               onClick={() => setStatesExpanded((v) => !v)}
-              className="text-xs text-gray-500 hover:text-gray-300 ml-1 transition-colors"
+              className="text-xs text-text-dim hover:text-text ml-1 transition-colors"
             >
               {statesExpanded ? '− less' : `+${stateCounts.size - TOP_N} more`}
             </button>
@@ -126,9 +128,38 @@ export default function DashboardFilters({
         </div>
       )}
 
-      {activeCount > 0 && (
-        <span className="ml-auto text-xs text-gray-600">{activeCount} filter{activeCount > 1 ? 's' : ''} active</span>
-      )}
+      <div className="ml-auto flex items-center gap-2">
+        {activeCount > 0 && (
+          <span className="text-xs font-mono text-text-dim">{activeCount} filter{activeCount > 1 ? 's' : ''} active</span>
+        )}
+        <div className="flex items-center gap-0.5 border border-border rounded-lg overflow-hidden">
+          <button
+            type="button"
+            title="Card view"
+            onClick={() => onViewMode('card')}
+            className={`p-1.5 transition-colors ${viewMode === 'card' ? 'bg-accent-muted text-accent' : 'text-text-dim hover:text-text'}`}
+          >
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <rect x="1" y="1" width="5" height="5" rx="1" fill="currentColor"/>
+              <rect x="8" y="1" width="5" height="5" rx="1" fill="currentColor"/>
+              <rect x="1" y="8" width="5" height="5" rx="1" fill="currentColor"/>
+              <rect x="8" y="8" width="5" height="5" rx="1" fill="currentColor"/>
+            </svg>
+          </button>
+          <button
+            type="button"
+            title="List view"
+            onClick={() => onViewMode('list')}
+            className={`p-1.5 transition-colors ${viewMode === 'list' ? 'bg-accent-muted text-accent' : 'text-text-dim hover:text-text'}`}
+          >
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <rect x="1" y="2" width="12" height="2" rx="1" fill="currentColor"/>
+              <rect x="1" y="6" width="12" height="2" rx="1" fill="currentColor"/>
+              <rect x="1" y="10" width="12" height="2" rx="1" fill="currentColor"/>
+            </svg>
+          </button>
+        </div>
+      </div>
     </div>
   )
 }

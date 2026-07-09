@@ -27,7 +27,7 @@ def _build_profile_block(ctx: UserContext) -> str:
     if ctx.age:
         lines.append(f"- Age: {ctx.age}")
     if ctx.experience:
-        label = "First-time auditionee" if ctx.experience == "first-time" else "Experienced member"
+        label = "Rookie" if ctx.experience == "rookie" else "Experienced member"
         lines.append(f"- Experience: {label}")
     if ctx.corpsHistory:
         history = ", ".join(f"{e.corps} ({e.year})" for e in ctx.corpsHistory)
