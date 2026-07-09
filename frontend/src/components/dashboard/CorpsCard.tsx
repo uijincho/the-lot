@@ -16,7 +16,18 @@ export default function CorpsCard({ corps }: Props) {
   return (
     <div className="bg-brand-surface border border-brand-border rounded-xl p-6 flex flex-col gap-4 hover:border-brand-gold transition-colors">
       <div className="flex items-start justify-between gap-4">
-        <h2 className="text-lg font-bold text-white">{corps.name}</h2>
+        <div>
+          <h2 className="text-lg font-bold text-white">{corps.name}</h2>
+          {corps.corps_class && (
+            <span className={`text-xs font-semibold px-2 py-0.5 rounded-full mt-1 inline-block ${
+              corps.corps_class === 'Open'
+                ? 'bg-blue-900/40 text-blue-300 border border-blue-700'
+                : 'bg-brand-gold/10 text-brand-gold border border-brand-gold/30'
+            }`}>
+              {corps.corps_class} Class
+            </span>
+          )}
+        </div>
         {corps.website_url && (
           <a
             href={corps.website_url}
@@ -24,7 +35,7 @@ export default function CorpsCard({ corps }: Props) {
             rel="noopener noreferrer"
             className="text-xs text-brand-gold hover:underline shrink-0"
           >
-            Website ↗
+            🔗
           </a>
         )}
       </div>
@@ -44,7 +55,7 @@ export default function CorpsCard({ corps }: Props) {
         </div>
       </div>
 
-      {corps.instruments && corps.instruments.length > 0 && (
+      {/* {corps.instruments && corps.instruments.length > 0 && (
         <div>
           <p className="text-gray-500 text-xs uppercase tracking-wider mb-2">Sections</p>
           <div className="flex flex-wrap gap-1.5">
@@ -64,7 +75,7 @@ export default function CorpsCard({ corps }: Props) {
         <p className="text-xs text-gray-400 leading-relaxed border-t border-brand-border pt-4">
           {corps.requirements}
         </p>
-      )}
+      )} */}
     </div>
   )
 }

@@ -16,7 +16,7 @@ async def chat(request: ChatRequest, db: AsyncSession = Depends(get_db)):
     chunks = await similarity_search(db, query_embedding, top_k=5)
 
     context_texts = [chunk.text for chunk in chunks]
-    answer = await generate_answer(request.question, context_texts)
+    answer = await generate_answer(request.question, context_texts, request.user_context)
 
     sources = [
         Source(
@@ -24,6 +24,7 @@ async def chat(request: ChatRequest, db: AsyncSession = Depends(get_db)):
             text_snippet=chunk.text[:200],
         )
         for chunk in chunks
+        if chunk.document
     ]
 
     return ChatResponse(answer=answer, sources=sources)

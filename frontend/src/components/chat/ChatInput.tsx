@@ -8,10 +8,12 @@ interface Props {
 export default function ChatInput({ onSend, disabled }: Props) {
   const [value, setValue] = useState('')
 
+  const MAX_LEN = 1000
+
   const handleSend = () => {
     const trimmed = value.trim()
     if (!trimmed || disabled) return
-    onSend(trimmed)
+    onSend(trimmed.slice(0, MAX_LEN))
     setValue('')
   }
 
@@ -30,7 +32,8 @@ export default function ChatInput({ onSend, disabled }: Props) {
           placeholder="Ask about audition requirements, dates, repertoire..."
           rows={2}
           value={value}
-          onChange={(e) => setValue(e.target.value)}
+          maxLength={MAX_LEN}
+        onChange={(e) => setValue(e.target.value)}
           onKeyDown={handleKeyDown}
           disabled={disabled}
         />

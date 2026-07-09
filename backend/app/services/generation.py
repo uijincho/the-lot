@@ -1,30 +1,64 @@
-from typing import List
+from typing import List, Optional
 
 import anthropic
 
 from app.core.config import settings
+from app.schemas.chat import UserContext
 
 client = anthropic.AsyncAnthropic(api_key=settings.anthropic_api_key)
 
-MODEL = "claude-haiku-4-5-20251001"
+MODEL = "claude-sonnet-5"
 
-SYSTEM_PROMPT = """You are an expert assistant helping Drum Corps International (DCI) audition candidates.
-Answer questions clearly and accurately using only the provided context from official corps audition materials.
-If the context does not contain enough information to answer the question, say so honestly.
-Keep answers concise and focused on what the candidate needs to know."""
+SYSTEM_PROMPT = """You are an expert assistant for Drum Corps International (DCI) audition candidates.
+You have deep knowledge of DCI corps, audition processes, marching technique, musical preparation, physical conditioning, and the overall member experience.
+Answer questions confidently using your knowledge of DCI. Be specific, practical, and encouraging.
+When a candidate profile is provided, personalize your answer to their instrument, experience level, location, and corps history.
+When uploaded corps documents are provided as context, treat them as authoritative and cite details from them directly.
+If no documents are provided, answer from your general DCI knowledge.
+Format responses in clear markdown where helpful — use lists, bold terms, and headings to make answers easy to scan."""
 
 
-async def generate_answer(question: str, context_chunks: List[str]) -> str:
-    context = "\n\n---\n\n".join(context_chunks)
+def _build_profile_block(ctx: UserContext) -> str:
+    lines = ["**Candidate profile:**"]
+    if ctx.name:
+        lines.append(f"- Name: {ctx.name}")
+    if ctx.instruments:
+        lines.append(f"- Section: {', '.join(ctx.instruments)}")
+    if ctx.age:
+        lines.append(f"- Age: {ctx.age}")
+    if ctx.experience:
+        label = "First-time auditionee" if ctx.experience == "first-time" else "Experienced member"
+        lines.append(f"- Experience: {label}")
+    if ctx.corpsHistory:
+        history = ", ".join(f"{e.corps} ({e.year})" for e in ctx.corpsHistory)
+        lines.append(f"- Corps history: {history}")
+    if ctx.states:
+        lines.append(f"- Willing to audition in: {', '.join(ctx.states)}")
+    return "\n".join(lines)
+
+
+async def generate_answer(
+    question: str,
+    context_chunks: List[str],
+    user_context: Optional[UserContext] = None,
+) -> str:
+    parts: List[str] = []
+
+    if user_context:
+        parts.append(_build_profile_block(user_context))
+
+    if context_chunks:
+        parts.append(
+            "**Uploaded corps documents** (treat as authoritative for specific details):\n\n"
+            + "\n\n---\n\n".join(context_chunks)
+        )
+
+    parts.append(f"**Question:** {question}")
+
     message = await client.messages.create(
         model=MODEL,
         max_tokens=1024,
         system=SYSTEM_PROMPT,
-        messages=[
-            {
-                "role": "user",
-                "content": f"Context from audition materials:\n\n{context}\n\nQuestion: {question}",
-            }
-        ],
+        messages=[{"role": "user", "content": "\n\n".join(parts)}],
     )
     return message.content[0].text

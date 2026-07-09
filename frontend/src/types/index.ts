@@ -7,6 +7,7 @@ export interface Corps {
   website_url: string | null
   instruments: string[] | null
   requirements: string | null
+  corps_class: string | null
   created_at: string
 }
 
