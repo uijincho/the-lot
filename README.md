@@ -8,9 +8,11 @@ Named after *the lot* — the iconic warm-up space at DCI events where members a
 
 ## Features
 
-- **RAG Q&A** — Ask audition questions and get answers grounded in real corps documents
-- **Audition Dashboard** — Browse corps with audition dates, locations, and instrument requirements
-- **Document Ingestion** — Upload PDFs or text files to feed the knowledge base
+- **Personalized Onboarding** — First-time visitors enter their name, instrument, age, experience, and which states they'd travel to audition in. Stored in a browser cookie for 365 days.
+- **Corps History** — Experienced marchers can search and log every corps they've marched with the year, surfaced on their profile.
+- **Smart Dashboard** — Corps cards filtered by the user's selected states and ranked by instrument match, with a "Recommended for You" section highlighting the best fits.
+- **RAG Q&A** — Ask audition questions and get answers grounded in real corps documents.
+- **Document Ingestion** — Upload PDFs or text files to feed the knowledge base.
 
 ---
 
@@ -23,6 +25,7 @@ Named after *the lot* — the iconic warm-up space at DCI events where members a
 | Database | PostgreSQL + pgvector |
 | Embeddings | OpenAI `text-embedding-3-small` |
 | Generation | Anthropic Claude Haiku 4.5 |
+| Storage | Browser cookies (365-day profile persistence) |
 
 ---
 
@@ -34,17 +37,20 @@ the-lot/
 │   ├── app/
 │   │   ├── api/routes/     # corps, chat, documents endpoints
 │   │   ├── core/           # config, database
-│   │   ├── models/         # SQLAlchemy ORM models
+│   │   ├── models/         # SQLAlchemy ORM models (Corps, Document, Chunk)
 │   │   ├── schemas/        # Pydantic request/response schemas
 │   │   └── services/       # embeddings, vector store, generation, ingestion
+│   ├── seed.sql            # 5 sample DCI corps
 │   ├── requirements.txt
 │   └── .env.example
 └── frontend/
     └── src/
-        ├── components/     # layout, dashboard, chat
+        ├── components/     # layout, dashboard, chat, onboarding
+        ├── context/        # UserProfileContext
+        ├── hooks/          # useUserProfile (cookie read/write)
         ├── pages/          # Dashboard, Chat
-        ├── lib/            # API client
-        └── types/
+        ├── lib/            # API client, geo utilities
+        └── types/          # Corps, UserProfile, ChatMessage
 ```
 
 ---
@@ -55,9 +61,18 @@ the-lot/
 
 - Python 3.9+
 - Node.js 18+
-- PostgreSQL with the `pgvector` extension
+- Docker (for PostgreSQL with pgvector)
 - OpenAI API key
 - Anthropic API key
+
+### Database
+
+```bash
+# Start PostgreSQL with pgvector via Docker
+docker compose up -d
+```
+
+The `pgvector` extension is enabled automatically on first migration.
 
 ### Backend
 
@@ -75,17 +90,17 @@ pip install -r requirements.txt
 cp .env.example .env
 # Edit .env with your values
 
-# Enable pgvector extension (run once in your database)
-psql -d thelot -c "CREATE EXTENSION IF NOT EXISTS vector;"
-
 # Run database migrations
 alembic upgrade head
 
+# Seed sample corps data
+docker exec -i the-lot-db-1 psql -U thelot -d thelot < seed.sql
+
 # Start the server
-uvicorn app.main:app --reload
+uvicorn app.main:app --port 8001 --reload
 ```
 
-Backend runs at `http://localhost:8000`. API docs at `http://localhost:8000/docs`.
+API docs at `http://localhost:8001/docs`.
 
 ### Frontend
 
@@ -104,7 +119,7 @@ Frontend runs at `http://localhost:5173`.
 Create `backend/.env` from `backend/.env.example`:
 
 ```
-DATABASE_URL=postgresql+asyncpg://user:password@localhost:5432/thelot
+DATABASE_URL=postgresql+asyncpg://thelot:thelot@localhost:5433/thelot
 OPENAI_API_KEY=sk-...
 ANTHROPIC_API_KEY=sk-ant-...
 ```
@@ -113,9 +128,11 @@ ANTHROPIC_API_KEY=sk-ant-...
 
 ## Usage
 
-1. **Ingest documents** — `POST /documents/upload` with a PDF or `.txt` file containing corps audition info
-2. **Ask questions** — use the Chat page or `POST /chat` with `{"question": "..."}`
-3. **Browse corps** — the Dashboard pulls from the `corps` table; seed it via `POST /corps` or direct SQL
+1. **Visit the app** — the onboarding modal appears on first visit; fill in your profile or skip
+2. **Select states** — choose which states you'd travel to audition in; the Dashboard filters corps accordingly
+3. **Browse corps** — the Dashboard shows "Recommended for You" corps that match your instrument, plus all others in your states
+4. **Ingest documents** — `POST /documents/upload` via `http://localhost:8001/docs` with a PDF or `.txt` file
+5. **Ask questions** — use the Chat page to ask anything about audition requirements, repertoire, and expectations
 
 ---
 
@@ -126,5 +143,5 @@ ANTHROPIC_API_KEY=sk-ant-...
 | `GET` | `/health` | Health check |
 | `GET` | `/corps` | List all corps |
 | `GET` | `/corps/{id}` | Single corps detail |
-| `POST` | `/chat` | RAG Q&A |
-| `POST` | `/documents/upload` | Upload and ingest a document |
+| `POST` | `/chat` | RAG Q&A — `{"question": "..."}` |
+| `POST` | `/documents/upload` | Upload and ingest a PDF or .txt file |
