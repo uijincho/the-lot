@@ -14,6 +14,7 @@ class CorpsResponse(BaseModel):
     website_url: Optional[str]
     instruments: Optional[List[str]]
     requirements: Optional[str]
+    corps_class: Optional[str]
     created_at: datetime
 
     model_config = {"from_attributes": True}

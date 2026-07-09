@@ -1,6 +1,9 @@
 import { NavLink } from 'react-router-dom'
+import { useProfile } from '../../context/UserProfileContext'
 
 export default function Navbar() {
+  const { profile } = useProfile()
+
   const linkClass = ({ isActive }: { isActive: boolean }) =>
     `text-sm font-semibold tracking-wide transition-colors ${
       isActive ? 'text-brand-gold' : 'text-gray-400 hover:text-white'
@@ -15,7 +18,10 @@ export default function Navbar() {
         </NavLink>
         <div className="flex items-center gap-8">
           <NavLink to="/" end className={linkClass}>Dashboard</NavLink>
-          <NavLink to="/chat" className={linkClass}>Ask Anything</NavLink>
+          <NavLink to="/chat" className={linkClass}>Ask Lucas</NavLink>
+          <NavLink to="/profile" className={linkClass}>
+            {profile?.name ? profile.name : 'Profile'}
+          </NavLink>
         </div>
       </div>
     </nav>

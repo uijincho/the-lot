@@ -1,3 +1,4 @@
+import ReactMarkdown from 'react-markdown'
 import type { ChatMessage } from '../../types'
 
 interface Props {
@@ -17,7 +18,29 @@ export default function MessageBubble({ message }: Props) {
               : 'bg-brand-surface border border-brand-border text-gray-100 rounded-bl-sm'
           }`}
         >
-          {message.content}
+          {isUser ? (
+            message.content
+          ) : (
+            <ReactMarkdown
+              components={{
+                p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
+                strong: ({ children }) => <strong className="font-semibold text-white">{children}</strong>,
+                em: ({ children }) => <em className="italic">{children}</em>,
+                ul: ({ children }) => <ul className="list-disc list-inside mb-2 space-y-0.5">{children}</ul>,
+                ol: ({ children }) => <ol className="list-decimal list-inside mb-2 space-y-0.5">{children}</ol>,
+                li: ({ children }) => <li className="text-gray-200">{children}</li>,
+                h1: ({ children }) => <h1 className="text-base font-bold text-white mb-1 mt-2">{children}</h1>,
+                h2: ({ children }) => <h2 className="text-sm font-bold text-white mb-1 mt-2">{children}</h2>,
+                h3: ({ children }) => <h3 className="text-sm font-semibold text-brand-gold mb-1 mt-2">{children}</h3>,
+                code: ({ children }) => <code className="bg-brand-dark rounded px-1 py-0.5 text-xs font-mono text-brand-gold">{children}</code>,
+                pre: ({ children }) => <pre className="bg-brand-dark border border-brand-border rounded-lg p-3 overflow-x-auto text-xs font-mono mb-2">{children}</pre>,
+                blockquote: ({ children }) => <blockquote className="border-l-2 border-brand-gold pl-3 text-gray-400 italic mb-2">{children}</blockquote>,
+                hr: () => <hr className="border-brand-border my-2" />,
+              }}
+            >
+              {message.content}
+            </ReactMarkdown>
+          )}
         </div>
 
         {message.sources && message.sources.length > 0 && (

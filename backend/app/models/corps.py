@@ -21,6 +21,7 @@ class Corps(Base):
     website_url: Mapped[Optional[str]] = mapped_column(String(512))
     instruments: Mapped[Optional[List[str]]] = mapped_column(ARRAY(String))
     requirements: Mapped[Optional[str]] = mapped_column(Text)
+    corps_class: Mapped[Optional[str]] = mapped_column(String(10), default="World")
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
     documents: Mapped[List["Document"]] = relationship("Document", back_populates="corps")
