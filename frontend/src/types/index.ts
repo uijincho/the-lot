@@ -20,3 +20,14 @@ export interface ChatMessage {
   content: string
   sources?: Source[]
 }
+
+export interface UserProfile {
+  name: string
+  instrument: string
+  age: string
+  experience: 'first-time' | '1-2 seasons' | '3+ seasons' | 'age-out'
+  location: string
+  locationRadius: 'any' | '500' | '1000' | '2000'
+  lat?: number
+  lng?: number
+}
