@@ -15,7 +15,7 @@ export default function Navbar() {
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
         <NavLink to="/" className="flex items-center gap-2">
           <span className="text-text font-display font-extrabold text-xl tracking-tight">THE LOT</span>
-          <span className="text-text-dim text-xs font-medium hidden sm:block">DCI Audition Database</span>
+          <span className="text-text-dim text-xs font-medium hidden sm:block">All your drum corps, in one place</span>
         </NavLink>
         <div className="flex items-center gap-6">
           <NavLink to="/" end className={linkClass}>Dashboard</NavLink>

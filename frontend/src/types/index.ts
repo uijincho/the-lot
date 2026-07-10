@@ -35,3 +35,11 @@ export interface UserProfile {
   corpsHistory: CorpsHistoryEntry[]
   states: string[]
 }
+
+export interface Recommendation {
+  corps: Corps
+  score: number
+  stars: 1 | 2 | 3
+  reasons: string[]
+  returning?: boolean
+}
