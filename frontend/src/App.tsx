@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { UserProfileProvider } from './context/UserProfileContext'
+import { AuthProvider } from './context/AuthContext'
 import Layout from './components/layout/Layout'
 import Dashboard from './pages/Dashboard'
 import Chat from './pages/Chat'
@@ -7,7 +7,7 @@ import Profile from './pages/Profile'
 
 export default function App() {
   return (
-    <UserProfileProvider>
+    <AuthProvider>
       <BrowserRouter>
         <Routes>
           <Route element={<Layout />}>
@@ -17,6 +17,6 @@ export default function App() {
           </Route>
         </Routes>
       </BrowserRouter>
-    </UserProfileProvider>
+    </AuthProvider>
   )
 }

@@ -1,8 +1,8 @@
-import { useProfile } from '../../context/UserProfileContext'
+import { useAuth } from '../../context/AuthContext'
 import ProfileForm, { EMPTY_PROFILE } from '../profile/ProfileForm'
 
 export default function OnboardingModal() {
-  const { isFirstVisit, saveProfile, skipOnboarding } = useProfile()
+  const { isFirstVisit, saveProfile, skipOnboarding } = useAuth()
 
   if (!isFirstVisit) return null
 

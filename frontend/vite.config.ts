@@ -6,6 +6,7 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
+      '/auth': 'http://localhost:8001',
       '/corps': 'http://localhost:8001',
       '/chat': 'http://localhost:8001',
       '/documents': 'http://localhost:8001',

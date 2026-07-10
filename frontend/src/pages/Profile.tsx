@@ -1,25 +1,49 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useProfile } from '../context/UserProfileContext'
+import { useAuth } from '../context/AuthContext'
+import AuthModal from '../components/auth/AuthModal'
 import ProfileForm, { EMPTY_PROFILE } from '../components/profile/ProfileForm'
 import type { UserProfile } from '../types'
 
 export default function Profile() {
-  const { profile, saveProfile, clearProfile } = useProfile()
+  const { isAuthenticated, profile, saveProfile, clearProfile, isLoading } = useAuth()
   const navigate = useNavigate()
   const [saved, setSaved] = useState(false)
   const [confirmClear, setConfirmClear] = useState(false)
+  const [showAuth, setShowAuth] = useState(false)
+
+  if (isLoading) {
+    return <div className="text-text-dim text-sm">Loading...</div>
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <>
+        {showAuth && <AuthModal onClose={() => setShowAuth(false)} />}
+        <div className="max-w-lg mx-auto text-center py-20">
+          <h1 className="text-2xl font-display font-extrabold text-text mb-3">Your Profile</h1>
+          <p className="text-text-dim text-sm mb-6">Sign in to save your profile and personalize your experience.</p>
+          <button
+            onClick={() => setShowAuth(true)}
+            className="bg-accent text-accent-text font-bold px-6 py-2.5 rounded-xl text-sm hover:brightness-110 transition-all"
+          >
+            Sign in or create account
+          </button>
+        </div>
+      </>
+    )
+  }
 
   const initialValues: UserProfile = profile ?? EMPTY_PROFILE
 
-  const handleSave = (data: UserProfile) => {
-    saveProfile(data)
+  const handleSave = async (data: UserProfile) => {
+    await saveProfile(data)
     setSaved(true)
     setTimeout(() => setSaved(false), 2500)
   }
 
-  const handleClear = () => {
-    clearProfile()
+  const handleClear = async () => {
+    await clearProfile()
     navigate('/')
   }
 

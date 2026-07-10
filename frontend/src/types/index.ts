@@ -36,6 +36,23 @@ export interface UserProfile {
   states: string[]
 }
 
+export interface User {
+  id: string
+  email: string
+  name: string | null
+  instruments: string[] | null
+  age: number | null
+  experience: string | null
+  corps_history: CorpsHistoryEntry[] | null
+  states: string[] | null
+}
+
+export interface TokenResponse {
+  access_token: string
+  token_type: string
+  user: User
+}
+
 export interface Recommendation {
   corps: Corps
   score: number
