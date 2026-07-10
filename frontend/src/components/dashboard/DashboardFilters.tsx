@@ -51,7 +51,6 @@ export default function DashboardFilters({
 
   const allStatesSorted = Array.from(stateCounts.keys()).sort()
   const stateOptions = statesExpanded ? allStatesSorted : topStates
-  const activeCount = (filterStates.length > 0 ? 1 : 0) + (filterClass !== 'all' ? 1 : 0) + (!showRecommended ? 1 : 0)
 
   return (
     <div className="bg-surface border border-border rounded-xl px-4 py-3 mb-6 flex flex-wrap items-center gap-4">
@@ -129,9 +128,9 @@ export default function DashboardFilters({
       )}
 
       <div className="ml-auto flex items-center gap-2">
-        {activeCount > 0 && (
+        {/* {activeCount > 0 && (
           <span className="text-xs font-mono text-text-dim">{activeCount} filter{activeCount > 1 ? 's' : ''} active</span>
-        )}
+        )} */}
         <div className="flex items-center gap-0.5 border border-border rounded-lg overflow-hidden">
           <button
             type="button"

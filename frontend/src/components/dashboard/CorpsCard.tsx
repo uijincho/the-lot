@@ -1,10 +1,14 @@
 import type { Corps } from '../../types'
+import StarBadge from './StarBadge'
 
 interface Props {
   corps: Corps
+  stars?: 1 | 2 | 3
+  auditionHint?: string
+  showAuditionSection?: boolean
 }
 
-export default function CorpsCard({ corps }: Props) {
+export default function CorpsCard({ corps, stars, auditionHint, showAuditionSection }: Props) {
   const formattedDate = corps.audition_date
     ? new Date(corps.audition_date + 'T00:00:00').toLocaleDateString('en-US', {
         month: 'long',
@@ -14,7 +18,7 @@ export default function CorpsCard({ corps }: Props) {
     : 'TBA'
 
   return (
-    <div className="bg-surface border border-border rounded-xl p-6 flex flex-col gap-4 hover:border-accent transition-colors">
+    <div className="bg-surface border border-border rounded-xl p-6 flex flex-col gap-4 hover:border-accent transition-colors h-full">
       <div className="flex items-start justify-between gap-4">
         <div>
           <h2 className="text-lg font-display font-bold text-text">{corps.name}</h2>
@@ -28,16 +32,19 @@ export default function CorpsCard({ corps }: Props) {
             </span>
           )}
         </div>
-        {corps.website_url && (
-          <a
-            href={corps.website_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-xs text-accent hover:underline shrink-0"
-          >
-            🔗
-          </a>
-        )}
+        <div className="flex items-center gap-2 shrink-0">
+          {stars && <StarBadge stars={stars} size="md" />}
+          {corps.website_url && (
+            <a
+              href={corps.website_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-accent hover:underline"
+            >
+              🔗
+            </a>
+          )}
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-3 text-sm">
@@ -49,10 +56,12 @@ export default function CorpsCard({ corps }: Props) {
           <p className="text-text-dim text-xs uppercase tracking-wider mb-1 font-mono">Audition Date</p>
           <p className="text-accent font-mono font-semibold">{formattedDate}</p>
         </div>
-        <div className="col-span-2">
-          <p className="text-text-dim text-xs uppercase tracking-wider mb-1 font-mono">Audition Location</p>
-          <p className="text-text">{corps.audition_location ?? '—'}</p>
-        </div>
+        {showAuditionSection && (
+          <div className={`col-span-2 ${!auditionHint ? 'invisible' : ''}`}>
+            <p className="text-text-dim text-xs uppercase tracking-wider mb-1 font-mono">Relevant Past Audition Location(s)</p>
+            <p className="text-text h-10 overflow-hidden">{auditionHint ?? ''}</p>
+          </div>
+        )}
       </div>
     </div>
   )

@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { fetchCorps } from '../lib/api'
 import { useProfile } from '../context/UserProfileContext'
 import CorpsCard from '../components/dashboard/CorpsCard'
 import CorpsListRow from '../components/dashboard/CorpsListRow'
 import DashboardFilters, { type ClassFilter, type ViewMode } from '../components/dashboard/DashboardFilters'
+import { getRecommendations } from '../lib/recommendation'
 import type { Corps } from '../types'
 
 export default function Dashboard() {
@@ -39,21 +40,52 @@ export default function Dashboard() {
   const byClass =
     filterClass === 'all' ? corps : corps.filter((c) => c.corps_class === filterClass)
 
-  // apply state filter
+  // apply state filter — match on home base OR historical audition locations
   const filtered =
     filterStates.length > 0
-      ? byClass.filter((c) => filterStates.some((code) => c.audition_location?.includes(code)))
+      ? byClass.filter((c) =>
+          filterStates.some(
+            (code) => c.audition_location?.includes(code) || c.location?.includes(code),
+          )
+        )
       : byClass
 
-  const recommendedIds = new Set(
-    profile?.instruments?.length
-      ? filtered
-          .filter((c) => profile.instruments.some((i) => c.instruments?.includes(i)))
-          .map((c) => c.id)
-      : [],
+  // For corps that matched via audition_location (not home base), build a hint string
+  // so the card can display "Past audition location: X" rather than showing nothing.
+  const auditionHints = new Map<string, string>()
+  if (filterStates.length) {
+    for (const c of filtered) {
+      if (filterStates.some((code) => c.location?.includes(code))) continue
+      const cities = (c.audition_location ?? '')
+        .split(';')
+        .map((s) => s.trim())
+        .filter((city) => filterStates.some((code) => city.includes(code)))
+      if (cities.length) auditionHints.set(c.id, cities.join('; '))
+    }
+  }
+
+  const recommendations = useMemo(
+    () => (profile ? getRecommendations(filtered, profile) : []),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [filtered, profile],
+  )
+  const recMap = useMemo(
+    () => new Map(recommendations.map((r) => [r.corps.id, r])),
+    [recommendations],
   )
 
-  const hasRecommended = recommendedIds.size > 0
+  const hasRecommended = recommendations.length > 0
+
+  // When recommendations are active, sort all corps by match quality then alpha.
+  // Otherwise split into World / Open sections.
+  const sortedForRec = useMemo(() => {
+    if (!showRecommended || !hasRecommended) return null
+    const starScore = (id: string) => recMap.get(id)?.stars ?? 0
+    return [...filtered].sort((a, b) => {
+      const diff = starScore(b.id) - starScore(a.id)
+      return diff !== 0 ? diff : a.name.localeCompare(b.name)
+    })
+  }, [showRecommended, hasRecommended, filtered, recMap])
 
   const worldCorps = filtered.filter((c) => c.corps_class !== 'Open')
   const openCorps = filtered.filter((c) => c.corps_class === 'Open')
@@ -119,7 +151,30 @@ export default function Dashboard() {
             <p className="text-text-dim text-center py-16">
               {corps.length > 0 ? 'No corps match the current filters.' : 'No corps found. Seed the database to get started.'}
             </p>
+          ) : sortedForRec ? (
+            // ── Recommendation-sorted flat view ──────────────────────────────
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <h2 className="text-sm font-display font-bold uppercase tracking-widest text-text-dim">Sorted for you</h2>
+                <span className="text-xs font-mono text-text-dim opacity-60">{sortedForRec.length} corps</span>
+                <div className="flex-1 yard-rule" />
+              </div>
+              {viewMode === 'card' ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                  {sortedForRec.map((c) => (
+                    <CorpsCard key={c.id} corps={c} stars={recMap.get(c.id)?.stars} auditionHint={auditionHints.get(c.id)} showAuditionSection={auditionHints.size > 0} />
+                  ))}
+                </div>
+              ) : (
+                <div className="flex flex-col gap-2">
+                  {sortedForRec.map((c) => (
+                    <CorpsListRow key={c.id} corps={c} stars={recMap.get(c.id)?.stars} auditionHint={auditionHints.get(c.id)} />
+                  ))}
+                </div>
+              )}
+            </div>
           ) : (
+            // ── Default World / Open class sections ──────────────────────────
             <div className="flex flex-col gap-10">
               {[{ label: 'World Class', items: worldCorps }, { label: 'Open Class', items: openCorps }]
                 .filter(({ items }) => items.length > 0)
@@ -133,25 +188,13 @@ export default function Dashboard() {
                     {viewMode === 'card' ? (
                       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                         {items.map((c) => (
-                          <div key={c.id} className="relative">
-                            {showRecommended && recommendedIds.has(c.id) && (
-                              <div className="absolute -top-2 -right-2 z-10 bg-accent text-accent-text text-xs font-bold px-2 py-0.5 rounded-full">
-                                Match
-                              </div>
-                            )}
-                            <CorpsCard corps={c} />
-                          </div>
+                          <CorpsCard key={c.id} corps={c} stars={recMap.get(c.id)?.stars} auditionHint={auditionHints.get(c.id)} showAuditionSection={auditionHints.size > 0} />
                         ))}
                       </div>
                     ) : (
                       <div className="flex flex-col gap-2">
                         {items.map((c) => (
-                          <CorpsListRow
-                            key={c.id}
-                            corps={c}
-                            isMatch={recommendedIds.has(c.id)}
-                            showMatch={showRecommended}
-                          />
+                          <CorpsListRow key={c.id} corps={c} stars={recMap.get(c.id)?.stars} auditionHint={auditionHints.get(c.id)} />
                         ))}
                       </div>
                     )}

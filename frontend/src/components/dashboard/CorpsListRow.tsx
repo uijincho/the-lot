@@ -1,12 +1,13 @@
 import type { Corps } from '../../types'
+import StarBadge from './StarBadge'
 
 interface Props {
   corps: Corps
-  isMatch?: boolean
-  showMatch?: boolean
+  stars?: 1 | 2 | 3
+  auditionHint?: string
 }
 
-export default function CorpsListRow({ corps, isMatch, showMatch }: Props) {
+export default function CorpsListRow({ corps, stars, auditionHint }: Props) {
   const formattedDate = corps.audition_date
     ? new Date(corps.audition_date + 'T00:00:00').toLocaleDateString('en-US', {
         month: 'short',
@@ -28,16 +29,17 @@ export default function CorpsListRow({ corps, isMatch, showMatch }: Props) {
             {corps.corps_class}
           </span>
         )}
-        {showMatch && isMatch && (
-          <span className="text-xs bg-accent text-accent-text font-bold px-2 py-0.5 rounded-full shrink-0">
-            Match
+        {stars && <StarBadge stars={stars} />}
+      </div>
+
+      <div className="shrink-0 w-44 hidden sm:block">
+        <span className="text-sm text-text-dim truncate block">{corps.location ?? '—'}</span>
+        {auditionHint && (
+          <span className="text-xs text-accent/70 truncate block" title={auditionHint}>
+            Auditions: {auditionHint}
           </span>
         )}
       </div>
-
-      <span className="text-sm text-text-dim shrink-0 w-44 truncate hidden sm:block">
-        {corps.location ?? '—'}
-      </span>
 
       <span className="font-mono text-sm text-accent font-semibold shrink-0 w-28 hidden md:block">
         {formattedDate}
