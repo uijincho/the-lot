@@ -1,4 +1,5 @@
 import uuid
+from typing import Optional
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -9,6 +10,19 @@ from app.core.security import decode_access_token
 from app.models.user import User
 
 bearer_scheme = HTTPBearer(auto_error=False)
+
+
+async def get_optional_user(
+    credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme),
+    db: AsyncSession = Depends(get_db),
+) -> Optional[User]:
+    if not credentials:
+        return None
+    payload = decode_access_token(credentials.credentials)
+    if not payload or "sub" not in payload:
+        return None
+    result = await db.execute(select(User).where(User.id == uuid.UUID(payload["sub"])))
+    return result.scalar_one_or_none()
 
 
 async def get_current_user(

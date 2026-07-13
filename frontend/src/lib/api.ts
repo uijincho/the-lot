@@ -82,3 +82,21 @@ export async function authUpdateMe(profile: Partial<UserProfile>): Promise<User>
   const res = await api.put<User>('/auth/me', body)
   return res.data
 }
+
+// ── Conversations ─────────────────────────────────────────────────────────────
+
+export interface ServerMessage {
+  role: 'user' | 'assistant'
+  content: string
+  sources?: { filename: string; text_snippet: string }[]
+  created_at: string
+}
+
+export async function fetchConversation(): Promise<ServerMessage[]> {
+  const res = await api.get<ServerMessage[]>('/conversations/current')
+  return res.data
+}
+
+export async function clearConversation(): Promise<void> {
+  await api.delete('/conversations/current')
+}

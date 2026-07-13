@@ -1,12 +1,29 @@
 import { useEffect, useRef, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
-import { sendChat } from '../../lib/api'
-import { useProfile } from '../../context/UserProfileContext'
+import type { Components } from 'react-markdown'
+import { useChat } from '../../context/ChatContext'
 import type { ChatMessage } from '../../types'
 
-const INTRO: ChatMessage = {
-  role: 'assistant',
-  content: "Hey! I'm **Lucas**, your DCI audition assistant. Ask me anything about corps, audition prep, or what to expect on tour.",
+const INTRO_CONTENT = "Hey! I'm **Lucas**, your DCI audition assistant. Ask me anything about corps, audition prep, or what to expect on tour."
+
+const mdComponents: Components = {
+  p: ({ children }) => <p className="mb-1.5 last:mb-0">{children}</p>,
+  strong: ({ children }) => <strong className="font-semibold text-text">{children}</strong>,
+  em: ({ children }) => <em className="italic">{children}</em>,
+  ul: ({ children }) => <ul className="list-disc list-inside mb-1.5 space-y-0.5">{children}</ul>,
+  ol: ({ children }) => <ol className="list-decimal list-inside mb-1.5 space-y-0.5">{children}</ol>,
+  li: ({ children }) => <li className="text-text">{children}</li>,
+  h3: ({ children }) => <h3 className="text-xs font-display font-semibold text-accent mb-1 mt-1.5">{children}</h3>,
+  code: ({ children }) => <code className="bg-bg rounded px-1 text-accent font-mono">{children}</code>,
+  blockquote: ({ children }) => <blockquote className="border-l-2 border-accent pl-2 text-text-dim italic">{children}</blockquote>,
+}
+
+function AssistantBubble({ content }: { content: string }) {
+  return (
+    <div className="max-w-[85%] px-3 py-2 rounded-2xl text-xs leading-relaxed bg-surface border border-border text-text rounded-bl-sm">
+      <ReactMarkdown components={mdComponents}>{content}</ReactMarkdown>
+    </div>
+  )
 }
 
 function LotMark() {
@@ -19,11 +36,9 @@ function LotMark() {
 }
 
 export default function FloatingChat() {
-  const { profile } = useProfile()
+  const { messages, loading, send } = useChat()
   const [open, setOpen] = useState(false)
-  const [messages, setMessages] = useState<ChatMessage[]>([INTRO])
   const [input, setInput] = useState('')
-  const [loading, setLoading] = useState(false)
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
 
@@ -38,16 +53,7 @@ export default function FloatingChat() {
     const q = input.trim()
     if (!q || loading) return
     setInput('')
-    setMessages((prev) => [...prev, { role: 'user', content: q }])
-    setLoading(true)
-    try {
-      const data = await sendChat(q, profile)
-      setMessages((prev) => [...prev, { role: 'assistant', content: data.answer, sources: data.sources }])
-    } catch {
-      setMessages((prev) => [...prev, { role: 'assistant', content: 'Sorry, something went wrong. Check that the backend is running.' }])
-    } finally {
-      setLoading(false)
-    }
+    await send(q)
   }
 
   function handleKey(e: React.KeyboardEvent<HTMLTextAreaElement>) {
@@ -59,14 +65,12 @@ export default function FloatingChat() {
 
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
-      {/* Chat panel */}
       {open && (
         <div className="w-80 flex flex-col bg-surface border border-border rounded-2xl shadow-2xl overflow-hidden"
           style={{ height: '480px' }}>
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-bg/60">
             <div className="flex items-center gap-2">
-              <LotMark />
               <div>
                 <p className="text-sm font-display font-bold text-text leading-none">Lucas</p>
                 <p className="text-xs text-text-dim leading-none mt-0.5">DCI Assistant</p>
@@ -86,7 +90,14 @@ export default function FloatingChat() {
 
           {/* Messages */}
           <div className="flex-1 overflow-y-auto px-3 py-3 space-y-3">
-            {messages.map((msg, i) => (
+            {/* Static intro — always shown, never saved */}
+            {messages.length === 0 && (
+              <div className="flex justify-start">
+                <AssistantBubble content={INTRO_CONTENT} />
+              </div>
+            )}
+
+            {messages.map((msg: ChatMessage, i: number) => (
               <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div className={`max-w-[85%] px-3 py-2 rounded-2xl text-xs leading-relaxed ${
                   msg.role === 'user'
@@ -94,25 +105,12 @@ export default function FloatingChat() {
                     : 'bg-surface border border-border text-text rounded-bl-sm'
                 }`}>
                   {msg.role === 'user' ? msg.content : (
-                    <ReactMarkdown
-                      components={{
-                        p: ({ children }) => <p className="mb-1.5 last:mb-0">{children}</p>,
-                        strong: ({ children }) => <strong className="font-semibold text-text">{children}</strong>,
-                        em: ({ children }) => <em className="italic">{children}</em>,
-                        ul: ({ children }) => <ul className="list-disc list-inside mb-1.5 space-y-0.5">{children}</ul>,
-                        ol: ({ children }) => <ol className="list-decimal list-inside mb-1.5 space-y-0.5">{children}</ol>,
-                        li: ({ children }) => <li className="text-text">{children}</li>,
-                        h3: ({ children }) => <h3 className="text-xs font-display font-semibold text-accent mb-1 mt-1.5">{children}</h3>,
-                        code: ({ children }) => <code className="bg-bg rounded px-1 text-accent font-mono">{children}</code>,
-                        blockquote: ({ children }) => <blockquote className="border-l-2 border-accent pl-2 text-text-dim italic">{children}</blockquote>,
-                      }}
-                    >
-                      {msg.content}
-                    </ReactMarkdown>
+                    <ReactMarkdown components={mdComponents}>{msg.content}</ReactMarkdown>
                   )}
                 </div>
               </div>
             ))}
+
             {loading && (
               <div className="flex justify-start">
                 <div className="bg-bg border border-border rounded-2xl rounded-bl-sm px-3 py-2 flex items-center gap-1">

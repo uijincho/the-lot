@@ -1,30 +1,9 @@
-import { useState } from 'react'
-import { sendChat } from '../lib/api'
-import { useProfile } from '../context/UserProfileContext'
-import type { ChatMessage } from '../types'
+import { useChat } from '../context/ChatContext'
 import MessageList from '../components/chat/MessageList'
 import ChatInput from '../components/chat/ChatInput'
 
 export default function Chat() {
-  const { profile } = useProfile()
-  const [messages, setMessages] = useState<ChatMessage[]>([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
-  const handleSend = async (question: string) => {
-    setError(null)
-    setMessages((prev) => [...prev, { role: 'user', content: question }])
-    setLoading(true)
-
-    try {
-      const { answer, sources } = await sendChat(question, profile)
-      setMessages((prev) => [...prev, { role: 'assistant', content: answer, sources }])
-    } catch {
-      setError('Failed to get a response. Check that the backend is running and API keys are set.')
-    } finally {
-      setLoading(false)
-    }
-  }
+  const { messages, loading, error, send } = useChat()
 
   return (
     <div className="flex flex-col h-[calc(100vh-10rem)] bg-bg rounded-2xl border border-border overflow-hidden">
@@ -41,7 +20,7 @@ export default function Chat() {
         </div>
       )}
 
-      <ChatInput onSend={handleSend} disabled={loading} />
+      <ChatInput onSend={send} disabled={loading} />
     </div>
   )
 }

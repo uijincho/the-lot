@@ -11,6 +11,7 @@ from app.core.config import settings
 from app.core.database import Base
 import app.models.corps  # noqa: F401 — registers models with Base.metadata
 import app.models.user  # noqa: F401
+import app.models.conversation  # noqa: F401
 
 config = context.config
 config.set_main_option("sqlalchemy.url", settings.database_url)
