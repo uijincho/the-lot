@@ -5,7 +5,7 @@ INSERT INTO corps (id, name, location, audition_date, audition_location, auditio
 -- ── WORLD CLASS ──────────────────────────────────────────────────────────────
 
 (
-  gen_random_uuid(), 'Blue Devils', 'Concord, CA', NULL, 'Concord, CA; Remote',
+  gen_random_uuid(), 'Blue Devils', 'Concord, CA', '2025-11-14', 'Concord, CA; Remote',
   '{"Brass":["Remote"],"Drumline":["Remote"],"Front Ensemble":["Southern CA","FL","Remote"],"Color Guard":["Remote"],"All":["Austin, TX"]}'::jsonb,
   'http://www.bluedevils.org',
   ARRAY['Trumpet', 'Mellophone', 'Baritone', 'Tuba', 'Snare', 'Tenor', 'Bass Drum', 'Front Ensemble', 'Color Guard'],
@@ -13,7 +13,7 @@ INSERT INTO corps (id, name, location, audition_date, audition_location, auditio
   'World', NOW()
 ),
 (
-  gen_random_uuid(), 'Bluecoats', 'Canton, OH', NULL, 'Canton, OH; Dallas, TX; Atlanta, GA; Southern CA; Remote',
+  gen_random_uuid(), 'Bluecoats', 'Canton, OH', '2025-11-22', 'Canton, OH; Dallas, TX; Atlanta, GA; Southern CA; Remote',
   '{"Brass":["TX","OH","GA","Southern CA","Remote"],"Drumline":["TX","OH","GA","Southern CA","Remote"],"Front Ensemble":["TX","OH","GA","Southern CA","Remote"],"Color Guard":["TX","OH","GA","Southern CA","Remote"]}'::jsonb,
   'http://www.bluecoats.com',
   ARRAY['Trumpet', 'Mellophone', 'Baritone', 'Tuba', 'Snare', 'Tenor', 'Bass Drum', 'Front Ensemble', 'Color Guard'],
@@ -21,7 +21,7 @@ INSERT INTO corps (id, name, location, audition_date, audition_location, auditio
   'World', NOW()
 ),
 (
-  gen_random_uuid(), 'Boston Crusaders', 'Boston, MA', NULL, 'San Antonio, TX; Dallas, TX; Houston, TX; Indianapolis, IN; Remote',
+  gen_random_uuid(), 'Boston Crusaders', 'Boston, MA', '2025-11-21', 'San Antonio, TX; Dallas, TX; Houston, TX; Indianapolis, IN; Remote',
   '{"Brass":["Houston, TX","Remote"],"Drumline":["Houston, TX","Remote"],"Front Ensemble":["Houston, TX","Remote"],"Color Guard":["Houston, TX"]}'::jsonb,
   'http://www.bostoncrusaders.org',
   ARRAY['Trumpet', 'Mellophone', 'Baritone', 'Tuba', 'Snare', 'Tenor', 'Bass Drum', 'Front Ensemble', 'Color Guard'],
@@ -29,7 +29,7 @@ INSERT INTO corps (id, name, location, audition_date, audition_location, auditio
   'World', NOW()
 ),
 (
-  gen_random_uuid(), 'Santa Clara Vanguard', 'Santa Clara, CA', NULL, 'Santa Clara, CA; Dallas, TX; Moscow, ID; Remote',
+  gen_random_uuid(), 'Santa Clara Vanguard', 'Santa Clara, CA', '2025-10-12', 'Santa Clara, CA; Dallas, TX; Moscow, ID; Remote',
   '{"Brass":["ID","Southern CA","Santa Clara, CA","Austin, TX","Cullowhee, NC","OK","North TX","Houston, TX","Japan","Remote"],"Drumline":["Southern CA","Austin, TX","Japan"],"Front Ensemble":["Southern CA","Austin, TX","Japan"],"Color Guard":["Tampa, FL","Southern CA","Austin, TX","Cullowhee, NC","Japan","Remote"],"All":["North TX","Santa Clara, CA"]}'::jsonb,
   'http://www.scvanguard.org',
   ARRAY['Trumpet', 'Mellophone', 'Baritone', 'Tuba', 'Snare', 'Tenor', 'Bass Drum', 'Front Ensemble', 'Color Guard'],
@@ -37,7 +37,7 @@ INSERT INTO corps (id, name, location, audition_date, audition_location, auditio
   'World', NOW()
 ),
 (
-  gen_random_uuid(), 'Carolina Crown', 'Fort Mill, SC', NULL, 'Fort Mill, SC; Dallas, TX; Indianapolis, IN; Austin, TX; Remote',
+  gen_random_uuid(), 'Carolina Crown', 'Fort Mill, SC', '2025-11-09', 'Fort Mill, SC; Dallas, TX; Indianapolis, IN; Austin, TX; Remote',
   '{"Brass":["Fort Mill, SC","Remote"],"Drumline":["Austin, TX","Indianapolis, IN","Fort Mill, SC"],"Front Ensemble":["Austin, TX","Fort Mill, SC"],"Color Guard":["Austin, TX","Indianapolis, IN","Orlando, FL","Fort Mill, SC"]}'::jsonb,
   'http://www.carolinacrown.org',
   ARRAY['Trumpet', 'Mellophone', 'Baritone', 'Contrabass', 'Snare', 'Tenor', 'Bass Drum', 'Front Ensemble', 'Color Guard'],
@@ -45,7 +45,7 @@ INSERT INTO corps (id, name, location, audition_date, audition_location, auditio
   'World', NOW()
 ),
 (
-  gen_random_uuid(), 'Phantom Regiment', 'Rockford, IL', NULL, 'Rockford, IL; Atlanta, GA; Austin, TX; Dallas, TX; Houston, TX; Indianapolis, IN; Irvine, CA; Kansas City, MO; Mililani, HI; Remote',
+  gen_random_uuid(), 'Phantom Regiment', 'Rockford, IL', '2025-10-26', 'Rockford, IL; Atlanta, GA; Austin, TX; Dallas, TX; Houston, TX; Indianapolis, IN; Irvine, CA; Kansas City, MO; Mililani, HI; Remote',
   '{"Brass":["Kansas City, MO","Rockford, IL","Fort Worth, TX","Atlanta, GA","Indianapolis, IN","Oahu, HI","Irvine, CA","Houston, TX","Austin, TX","Remote"],"Drumline":["Rockford, IL","Fort Worth, TX","Atlanta, GA","Indianapolis, IN","Oahu, HI","Houston, TX","Austin, TX","Remote"],"Front Ensemble":["Rockford, IL","Fort Worth, TX","Atlanta, GA","Indianapolis, IN","Oahu, HI","Houston, TX","Austin, TX","Remote"],"Color Guard":["Irvine, CA","Fort Worth, TX","Atlanta, GA","Indianapolis, IN","Oahu, HI","Houston, TX","Remote"]}'::jsonb,
   'http://www.regiment.org',
   ARRAY['Trumpet', 'Mellophone', 'Baritone', 'Tuba', 'Snare', 'Tenor', 'Bass Drum', 'Front Ensemble', 'Color Guard'],
@@ -61,7 +61,7 @@ INSERT INTO corps (id, name, location, audition_date, audition_location, auditio
   'World', NOW()
 ),
 (
-  gen_random_uuid(), 'Blue Stars', 'La Crosse, WI', NULL, 'La Crosse, WI; Lebanon, IN; Remote',
+  gen_random_uuid(), 'Blue Stars', 'La Crosse, WI', '2025-11-23', 'La Crosse, WI; Lebanon, IN; Remote',
   '{"Brass":["Lebanon, IN","Austin, TX","Fort Worth, TX","Phoenix, AZ","Tokyo, Japan","Houston, TX","Remote"],"Drumline":["Lebanon, IN","Austin, TX","Tokyo, Japan","Houston, TX","Remote"],"Front Ensemble":["Lebanon, IN","Austin, TX","Houston, TX","Remote"],"Color Guard":["Lebanon, IN","Dallas-Fort Worth, TX","Remote"]}'::jsonb,
   'http://www.bluestars.org',
   ARRAY['Trumpet', 'Mellophone', 'Baritone', 'Tuba', 'Snare', 'Tenor', 'Bass Drum', 'Front Ensemble', 'Color Guard'],
@@ -69,7 +69,7 @@ INSERT INTO corps (id, name, location, audition_date, audition_location, auditio
   'World', NOW()
 ),
 (
-  gen_random_uuid(), 'The Cavaliers', 'Rosemont, IL', NULL, 'Rosemont, IL; Chicago, IL; Remote',
+  gen_random_uuid(), 'The Cavaliers', 'Rosemont, IL', '2025-11-02', 'Rosemont, IL; Chicago, IL; Remote',
   '{"Brass":["AL","Houston, TX","Central FL","West Lafayette, IN","Naperville, IL","Saginaw, TX","Blue Springs, MO","Arcadia, CA"],"Drumline":["Remote"],"Front Ensemble":["Remote"],"Color Guard":["Remote"]}'::jsonb,
   'http://www.cavaliers.org',
   ARRAY['Trumpet', 'Mellophone', 'Baritone', 'Tuba', 'Snare', 'Tenor', 'Bass Drum', 'Front Ensemble', 'Color Guard'],
@@ -77,7 +77,7 @@ INSERT INTO corps (id, name, location, audition_date, audition_location, auditio
   'World', NOW()
 ),
 (
-  gen_random_uuid(), 'Troopers', 'Casper, WY', NULL, 'Casper, WY; Indianapolis, IN; Remote',
+  gen_random_uuid(), 'Troopers', 'Casper, WY', '2025-11-13', 'Casper, WY; Indianapolis, IN; Remote',
   '{"Brass":["Eaton, CO","Ashburn, VA","Garland, TX"],"Drumline":["Garland, TX","Eaton, CO","Ashburn, VA"],"Front Ensemble":["Garland, TX","Eaton, CO","Ashburn, VA"],"Color Guard":["Garland, TX","Eaton, CO","Ashburn, VA"],"All":["Indianapolis, IN"]}'::jsonb,
   'http://www.troopersdrumcorps.org',
   ARRAY['Trumpet', 'Mellophone', 'Baritone', 'Tuba', 'Snare', 'Tenor', 'Bass Drum', 'Front Ensemble', 'Color Guard'],
@@ -85,7 +85,7 @@ INSERT INTO corps (id, name, location, audition_date, audition_location, auditio
   'World', NOW()
 ),
 (
-  gen_random_uuid(), 'Colts', 'Dubuque, IA', NULL, 'Kokomo, IN; Oskaloosa, IA; Orlando, FL; Houston, TX; Remote',
+  gen_random_uuid(), 'Colts', 'Dubuque, IA', '2025-11-28', 'Kokomo, IN; Oskaloosa, IA; Orlando, FL; Houston, TX; Remote',
   '{"Brass":["Orlando, FL","Kokomo, IN"],"Drumline":["Orlando, FL","Kokomo, IN"],"Front Ensemble":["Orlando, FL","Kokomo, IN"],"All":["Kokomo, IN","Houston, TX","Oskaloosa, IA"]}'::jsonb,
   'http://www.colts.org',
   ARRAY['Trumpet', 'Mellophone', 'Baritone', 'Tuba', 'Snare', 'Tenor', 'Bass Drum', 'Front Ensemble', 'Color Guard'],
@@ -93,7 +93,7 @@ INSERT INTO corps (id, name, location, audition_date, audition_location, auditio
   'World', NOW()
 ),
 (
-  gen_random_uuid(), 'Blue Knights', 'Denver, CO', NULL, 'Denver, CO; Remote',
+  gen_random_uuid(), 'Blue Knights', 'Denver, CO', '2025-11-16', 'Denver, CO; Remote',
   '{"Brass":["Dallas, TX","Denver, CO","Houston, TX","San Antonio, TX","South FL","Japan","Southern CA"],"Drumline":["Dallas, TX","Denver, CO","Houston, TX","Indianapolis, IN","San Antonio, TX","Japan","Southern CA"],"Front Ensemble":["Dallas, TX","Denver, CO","Houston, TX","Indianapolis, IN","Japan"],"Color Guard":["Dallas, TX","Denver, CO","Houston, TX","Japan","Southern CA"]}'::jsonb,
   'http://www.ascendperformingarts.org',
   ARRAY['Trumpet', 'Mellophone', 'Baritone', 'Tuba', 'Snare', 'Tenor', 'Bass Drum', 'Front Ensemble', 'Color Guard'],
@@ -101,7 +101,7 @@ INSERT INTO corps (id, name, location, audition_date, audition_location, auditio
   'World', NOW()
 ),
 (
-  gen_random_uuid(), 'Spirit of Atlanta', 'Atlanta, GA', NULL, 'Atlanta, GA; Jacksonville, AL; Cullowhee, NC; Moore, OK; Knoxville, TN; Remote',
+  gen_random_uuid(), 'Spirit of Atlanta', 'Atlanta, GA', '2025-11-02', 'Atlanta, GA; Jacksonville, AL; Cullowhee, NC; Moore, OK; Knoxville, TN; Remote',
   '{"Brass":["Orlando, FL","Jackson, MS","Cullowhee, NC","Newnan, GA","Atlanta, GA","Moore, OK","East TN"],"Drumline":["Orlando, FL","Jackson, MS","Cullowhee, NC","Newnan, GA","Atlanta, GA","Moore, OK","East TN"],"Front Ensemble":["Orlando, FL","Jackson, MS","Cullowhee, NC","Newnan, GA","Atlanta, GA","Moore, OK","East TN"],"Color Guard":["Atlanta, GA","East TN"]}'::jsonb,
   'https://www.spiritofatlanta.org',
   ARRAY['Trumpet', 'Mellophone', 'Baritone', 'Tuba', 'Snare', 'Tenor', 'Bass Drum', 'Front Ensemble', 'Color Guard'],
@@ -109,7 +109,7 @@ INSERT INTO corps (id, name, location, audition_date, audition_location, auditio
   'World', NOW()
 ),
 (
-  gen_random_uuid(), 'Madison Scouts', 'Madison, WI', NULL, 'Madison, WI; Remote',
+  gen_random_uuid(), 'Madison Scouts', 'Madison, WI', '2025-11-23', 'Madison, WI; Remote',
   '{"Brass":["Dayton, OH","Marietta, GA","TX","Milwaukee, WI"],"Drumline":["Dayton, OH","Marietta, GA","TX","Milwaukee, WI"],"Front Ensemble":["Dayton, OH","Marietta, GA","TX","Milwaukee, WI"],"Color Guard":["Dayton, OH","Union, NJ"],"All":["Milwaukee, WI"]}'::jsonb,
   'http://www.madisonscouts.org',
   ARRAY['Trumpet', 'Mellophone', 'Baritone', 'Tuba', 'Snare', 'Tenor', 'Bass Drum', 'Front Ensemble', 'Color Guard'],
@@ -117,7 +117,7 @@ INSERT INTO corps (id, name, location, audition_date, audition_location, auditio
   'World', NOW()
 ),
 (
-  gen_random_uuid(), 'Pacific Crest', 'City of Industry, CA', NULL, 'City of Industry, CA; Remote',
+  gen_random_uuid(), 'Pacific Crest', 'City of Industry, CA', '2025-11-09', 'City of Industry, CA; Remote',
   '{"Brass":["Buda, TX"],"Drumline":["Buda, TX"],"Front Ensemble":["Denton, TX"],"All":["Diamond Bar, CA"]}'::jsonb,
   'http://www.pacific-crest.org',
   ARRAY['Trumpet', 'Mellophone', 'Baritone', 'Tuba', 'Snare', 'Tenor', 'Bass Drum', 'Front Ensemble', 'Color Guard'],
@@ -125,7 +125,7 @@ INSERT INTO corps (id, name, location, audition_date, audition_location, auditio
   'World', NOW()
 ),
 (
-  gen_random_uuid(), 'Music City', 'Nashville, TN', NULL, 'Nashville, TN; Remote',
+  gen_random_uuid(), 'Music City', 'Nashville, TN', '2025-12-05', 'Nashville, TN; Remote',
   '{"All":["Nashville, TN"]}'::jsonb,
   'https://musiccityyouth.org',
   ARRAY['Trumpet', 'Mellophone', 'Baritone', 'Tuba', 'Snare', 'Tenor', 'Bass Drum', 'Front Ensemble', 'Color Guard'],
@@ -133,7 +133,7 @@ INSERT INTO corps (id, name, location, audition_date, audition_location, auditio
   'World', NOW()
 ),
 (
-  gen_random_uuid(), 'The Academy', 'Tempe, AZ', NULL, 'Tempe, AZ; Henderson, NV; Houston, TX; Remote',
+  gen_random_uuid(), 'The Academy', 'Tempe, AZ', '2025-12-05', 'Tempe, AZ; Henderson, NV; Houston, TX; Remote',
   '{"Brass":["Mililani, HI","Las Vegas, NV","Visalia, CA","Houston, TX","Remote"],"Drumline":["Las Vegas, NV","Visalia, CA","Houston, TX"],"Front Ensemble":["Las Vegas, NV","Visalia, CA","Houston, TX"],"Color Guard":["Las Vegas, NV","Visalia, CA","Houston, TX"],"All":["Casa Grande, AZ","Remote"]}'::jsonb,
   'https://www.arizonaacademy.org',
   ARRAY['Trumpet', 'Mellophone', 'Baritone', 'Tuba', 'Snare', 'Tenor', 'Bass Drum', 'Front Ensemble', 'Color Guard'],
@@ -141,7 +141,7 @@ INSERT INTO corps (id, name, location, audition_date, audition_location, auditio
   'World', NOW()
 ),
 (
-  gen_random_uuid(), 'Crossmen', 'San Antonio, TX', NULL, 'San Antonio, TX; Houston, TX; Austin, TX; Dallas, TX; Remote',
+  gen_random_uuid(), 'Crossmen', 'San Antonio, TX', '2025-11-15', 'San Antonio, TX; Houston, TX; Austin, TX; Dallas, TX; Remote',
   '{"All":["Dallas-Fort Worth, TX","Austin, TX","San Antonio, TX"]}'::jsonb,
   'http://www.crossmen.org',
   ARRAY['Trumpet', 'Mellophone', 'Baritone', 'Tuba', 'Snare', 'Tenor', 'Bass Drum', 'Front Ensemble', 'Color Guard'],
@@ -149,7 +149,7 @@ INSERT INTO corps (id, name, location, audition_date, audition_location, auditio
   'World', NOW()
 ),
 (
-  gen_random_uuid(), 'Genesis', 'Austin, TX', NULL, 'Austin, TX; Remote',
+  gen_random_uuid(), 'Genesis', 'Austin, TX', '2025-11-16', 'Austin, TX; Remote',
   '{"Color Guard":["Dallas, TX","Houston, TX","San Antonio, TX","Rio Grande Valley, TX"],"All":["Buda, TX"]}'::jsonb,
   'http://www.genesisdbc.org',
   ARRAY['Trumpet', 'Mellophone', 'Baritone', 'Tuba', 'Snare', 'Tenor', 'Bass Drum', 'Front Ensemble', 'Color Guard'],
@@ -157,7 +157,7 @@ INSERT INTO corps (id, name, location, audition_date, audition_location, auditio
   'World', NOW()
 ),
 (
-  gen_random_uuid(), 'Seattle Cascades', 'Seattle, WA', NULL, 'Seattle, WA; Vernonia, OR; Remote',
+  gen_random_uuid(), 'Seattle Cascades', 'Seattle, WA', '2025-11-14', 'Seattle, WA; Vernonia, OR; Remote',
   '{"All":["Vernonia, OR","Remote"]}'::jsonb,
   'http://www.seattlecascades.org',
   ARRAY['Trumpet', 'Mellophone', 'Baritone', 'Tuba', 'Snare', 'Tenor', 'Bass Drum', 'Front Ensemble', 'Color Guard'],
@@ -165,7 +165,7 @@ INSERT INTO corps (id, name, location, audition_date, audition_location, auditio
   'World', NOW()
 ),
 (
-  gen_random_uuid(), 'Spartans', 'Nashua, NH', NULL, 'Nashua, NH; Remote',
+  gen_random_uuid(), 'Spartans', 'Nashua, NH', '2025-12-05', 'Nashua, NH; Remote',
   '{"All":["Fitchburg, MA","Westford, MA","West Newbury, MA","Lawrence, MA"]}'::jsonb,
   'http://www.spartansdbc.org',
   ARRAY['Trumpet', 'Mellophone', 'Baritone', 'Tuba', 'Snare', 'Tenor', 'Bass Drum', 'Front Ensemble', 'Color Guard'],
