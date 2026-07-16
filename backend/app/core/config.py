@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     anthropic_api_key: str
     secret_key: str = "dev-secret-change-in-production"
     access_token_expire_minutes: int = 60 * 24 * 7  # 7 days
+    frontend_url: str = "http://localhost:5173"
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
