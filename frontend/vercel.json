@@ -1,10 +1,10 @@
 {
   "rewrites": [
-    { "source": "/auth/:path*",          "destination": "https://REPLACE_WITH_RAILWAY_URL/auth/:path*" },
-    { "source": "/corps/:path*",         "destination": "https://REPLACE_WITH_RAILWAY_URL/corps/:path*" },
-    { "source": "/chat/:path*",          "destination": "https://REPLACE_WITH_RAILWAY_URL/chat/:path*" },
-    { "source": "/documents/:path*",     "destination": "https://REPLACE_WITH_RAILWAY_URL/documents/:path*" },
-    { "source": "/conversations/:path*", "destination": "https://REPLACE_WITH_RAILWAY_URL/conversations/:path*" },
-    { "source": "/health",               "destination": "https://REPLACE_WITH_RAILWAY_URL/health" }
+    { "source": "/auth/:path*",          "destination": "https://the-lot-production.up.railway.app/auth/:path*" },
+    { "source": "/corps/:path*",         "destination": "https://the-lot-production.up.railway.app/corps/:path*" },
+    { "source": "/chat/:path*",          "destination": "https://the-lot-production.up.railway.app/chat/:path*" },
+    { "source": "/documents/:path*",     "destination": "https://the-lot-production.up.railway.app/documents/:path*" },
+    { "source": "/conversations/:path*", "destination": "https://the-lot-production.up.railway.app/conversations/:path*" },
+    { "source": "/health",               "destination": "https://the-lot-production.up.railway.app/health" }
   ]
 }

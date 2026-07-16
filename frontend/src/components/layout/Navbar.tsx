@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import AuthModal from '../auth/AuthModal'
-import ThemeToggle from './ThemeToggle'
 
 export default function Navbar() {
   const { user, isAuthenticated, logout } = useAuth()
