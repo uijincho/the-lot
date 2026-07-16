@@ -58,6 +58,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const register = async (email: string, password: string) => {
     const res = await authRegister(email, password)
     localStorage.setItem(TOKEN_KEY, res.access_token)
+    localStorage.setItem('the_lot_has_account', '1')
     setUser(res.user)
     setSkipped(false)
   }

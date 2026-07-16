@@ -10,7 +10,7 @@ export default function Navbar() {
   const [showUserMenu, setShowUserMenu] = useState(false)
 
   const linkClass = ({ isActive }: { isActive: boolean }) =>
-    `text-sm font-semibold tracking-wide transition-colors ${
+    `text-sm font-display font-semibold tracking-wide transition-colors ${
       isActive ? 'text-accent' : 'text-text-dim hover:text-text'
     }`
 
@@ -32,7 +32,7 @@ export default function Navbar() {
               <div className="relative">
                 <button
                   onClick={() => setShowUserMenu((v) => !v)}
-                  className="text-sm font-semibold text-text-dim hover:text-text transition-colors flex items-center gap-1.5"
+                  className="text-sm font-display font-semibold text-text-dim hover:text-text transition-colors flex items-center gap-1.5"
                 >
                   <span className="w-6 h-6 rounded-full bg-accent/20 text-accent text-xs flex items-center justify-center font-bold">
                     {(user?.name || user?.email || '?')[0].toUpperCase()}
@@ -56,13 +56,18 @@ export default function Navbar() {
             ) : (
               <button
                 onClick={() => setShowAuth(true)}
-                className="text-sm font-semibold text-text-dim hover:text-text transition-colors"
+                aria-label="Sign in"
+                className="p-2 rounded-lg text-text-dim hover:text-text transition-colors"
               >
-                Sign in
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                  <circle cx="12" cy="8" r="4"/>
+                  <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+                </svg>
               </button>
             )}
-
-            <ThemeToggle />
+            {/*
+              <ThemeToggle />
+              */}
           </div>
         </div>
       </nav>

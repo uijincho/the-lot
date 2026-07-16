@@ -104,9 +104,17 @@ export default function Dashboard() {
                 {inst}
               </span>
             ))}
-            <span className="text-xs bg-bg border border-border text-text-dim px-2.5 py-1 rounded-full">
-              {profile.experience === 'rookie' ? 'Rookie' : 'Experienced member'}
-            </span>
+            {profile.corpsHistory?.length ? (
+              profile.corpsHistory.map((e, i) => (
+                <span key={i} className="text-xs bg-bg border border-border text-text-dim px-2.5 py-1 rounded-full">
+                  {e.corps} &apos;{String(e.year).slice(-2)}
+                </span>
+              ))
+            ) : (
+              <span className="text-xs bg-bg border border-border text-text-dim px-2.5 py-1 rounded-full">
+                Rookie
+              </span>
+            )}
           </div>
         </div>
       ) : (

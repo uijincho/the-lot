@@ -26,15 +26,6 @@ function AssistantBubble({ content }: { content: string }) {
   )
 }
 
-function LotMark() {
-  return (
-    <div className="w-7 h-7 rounded bg-structure flex items-center justify-center gap-[3px] shrink-0">
-      <span className="w-px h-4 bg-accent rounded-full" />
-      <span className="w-px h-4 bg-accent rounded-full" />
-    </div>
-  )
-}
-
 export default function FloatingChat() {
   const { messages, loading, send } = useChat()
   const [open, setOpen] = useState(false)
