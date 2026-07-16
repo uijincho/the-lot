@@ -65,7 +65,7 @@ const INSTRUMENT_SECTION: Record<string, string> = {
   Snare: 'Percussion', Tenor: 'Percussion', Bass: 'Percussion', Cymbal: 'Percussion',
   Marimba: 'Front Ensemble', Vibraphone: 'Front Ensemble', Xylophone: 'Front Ensemble',
   Synthesizer: 'Front Ensemble', Timpani: 'Front Ensemble', 'Aux Percussion': 'Front Ensemble',
-  Rifle: 'Color Guard', Sabre: 'Color Guard', Flag: 'Color Guard', 'General Effect': 'Color Guard',
+  Rifle: 'Color Guard', Sabre: 'Color Guard', Flag: 'Color Guard', 'Dance': 'Color Guard',
 }
 
 const HIATUS_2026 = new Set(['Mandarins'])

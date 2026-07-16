@@ -1,9 +1,14 @@
+export type AuditionCaption = 'Brass' | 'Drumline' | 'Front Ensemble' | 'Color Guard' | 'All'
+
 export interface Corps {
   id: string
   name: string
   location: string | null
   audition_date: string | null
   audition_location: string | null
+  // Per-caption overlay. When present, takes precedence over audition_location for display.
+  // null means data hasn't been entered yet — fall back to audition_location string.
+  audition_locations: Partial<Record<AuditionCaption, string[]>> | null
   website_url: string | null
   instruments: string[] | null
   requirements: string | null

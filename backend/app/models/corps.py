@@ -4,7 +4,7 @@ from typing import Optional, List
 
 from pgvector.sqlalchemy import Vector
 from sqlalchemy import String, Text, Date, DateTime, Integer, ForeignKey, ARRAY
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
@@ -18,6 +18,9 @@ class Corps(Base):
     location: Mapped[Optional[str]] = mapped_column(String(255))
     audition_date: Mapped[Optional[date]] = mapped_column(Date)
     audition_location: Mapped[Optional[str]] = mapped_column(String(255))
+    # Per-caption locations: {"Brass": ["City, ST"], "Drumline": ["City, ST"], "All": [...]}
+    # Captions: "Brass" | "Drumline" | "Front Ensemble" | "Color Guard" | "All"
+    audition_locations: Mapped[Optional[dict]] = mapped_column(JSONB, nullable=True)
     website_url: Mapped[Optional[str]] = mapped_column(String(512))
     instruments: Mapped[Optional[List[str]]] = mapped_column(ARRAY(String))
     requirements: Mapped[Optional[str]] = mapped_column(Text)

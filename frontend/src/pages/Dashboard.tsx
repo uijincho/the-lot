@@ -5,6 +5,7 @@ import CorpsCard from '../components/dashboard/CorpsCard'
 import CorpsListRow from '../components/dashboard/CorpsListRow'
 import DashboardFilters, { type ClassFilter, type ViewMode } from '../components/dashboard/DashboardFilters'
 import { getRecommendations } from '../lib/recommendation'
+import { getAllLocations, getLocationsForCaption, instrumentsToCaption } from '../lib/auditionLocations'
 import type { Corps } from '../types'
 
 export default function Dashboard() {
@@ -40,27 +41,32 @@ export default function Dashboard() {
   const byClass =
     filterClass === 'all' ? corps : corps.filter((c) => c.corps_class === filterClass)
 
-  // apply state filter — match on home base OR historical audition locations
+  const userCaption = profile ? instrumentsToCaption(profile.instruments ?? []) : null
+
+  // apply state filter — check all locations across all captions
   const filtered =
     filterStates.length > 0
-      ? byClass.filter((c) =>
-          filterStates.some(
-            (code) => c.audition_location?.includes(code) || c.location?.includes(code),
+      ? byClass.filter((c) => {
+          const locs = getAllLocations(c)
+          return filterStates.some((code) =>
+            code === 'Remote'
+              ? locs.some((l) => l.toLowerCase().includes('remote')) ||
+                c.requirements?.toLowerCase().includes('video')
+              : locs.some((l) => l.includes(code)) || c.location?.includes(code),
           )
-        )
+        })
       : byClass
 
-  // For corps that matched via audition_location (not home base), build a hint string
-  // so the card can display "Past audition location: X" rather than showing nothing.
+  // Build per-card location hint scoped to the user's caption when possible.
   const auditionHints = new Map<string, string>()
   if (filterStates.length) {
     for (const c of filtered) {
       if (filterStates.some((code) => c.location?.includes(code))) continue
-      const cities = (c.audition_location ?? '')
-        .split(';')
-        .map((s) => s.trim())
-        .filter((city) => filterStates.some((code) => city.includes(code)))
-      if (cities.length) auditionHints.set(c.id, cities.join('; '))
+      const locs = getLocationsForCaption(c, userCaption)
+      const matched = locs.filter((loc) =>
+        filterStates.some((code) => code === 'Remote' ? loc.toLowerCase().includes('remote') : loc.includes(code))
+      )
+      if (matched.length) auditionHints.set(c.id, matched.join('; '))
     }
   }
 
