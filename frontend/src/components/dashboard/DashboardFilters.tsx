@@ -40,7 +40,8 @@ export default function DashboardFilters({
   corps.forEach((c) => {
     if (!c.audition_location) return
     Object.keys(STATE_NAMES).forEach((code) => {
-      if (c.audition_location!.includes(code)) stateCounts.set(code, (stateCounts.get(code) ?? 0) + 1)
+      if (code !== 'Remote' && c.audition_location!.includes(code))
+        stateCounts.set(code, (stateCounts.get(code) ?? 0) + 1)
     })
   })
 
@@ -88,10 +89,21 @@ export default function DashboardFilters({
         ))}
       </div>
 
-      {/* State filter */}
+      {/* Location filter (states + video) */}
       {stateOptions.length > 0 && (
         <div className="flex items-center gap-1.5 flex-wrap">
-          <span className="text-xs text-text-dim font-mono mr-0.5">States:</span>
+          <span className="text-xs text-text-dim font-mono mr-0.5">Locations:</span>
+          <button
+            type="button"
+            onClick={() => onToggleState('Remote')}
+            className={`text-xs font-mono font-medium px-2.5 py-1 rounded-lg border transition-colors ${
+              filterStates.includes('Remote')
+                ? 'bg-accent text-accent-text border-accent'
+                : 'bg-bg text-text-dim border-border hover:text-text'
+            }`}
+          >
+            Video
+          </button>
           {stateOptions.map((code) => (
             <button
               key={code}

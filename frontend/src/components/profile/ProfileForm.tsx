@@ -8,7 +8,7 @@ export const SECTIONS: Record<string, string[]> = {
   Brass: ['Trumpet', 'Mellophone', 'Baritone', 'Euphonium', 'Contra'],
   Drumline: ['Snare', 'Tenor', 'Bass', 'Cymbal'],
   'Front Ensemble': ['Marimba', 'Vibraphone', 'Xylophone', 'Synthesizer', 'Timpani', 'Aux Percussion'],
-  'Color Guard': ['Rifle', 'Sabre', 'Flag', 'General Effect'],
+  'Color Guard': ['Rifle', 'Sabre', 'Flag', 'Dance'],
 }
 
 // All DCI corps (active + inactive/hiatus), alphabetical — for history logging only.
@@ -63,6 +63,7 @@ export const DCI_CORPS = [
 ]
 
 export const STATE_NAMES: Record<string, string> = {
+  Remote: 'Remote / Video',
   AL: 'Alabama', AK: 'Alaska', AZ: 'Arizona', AR: 'Arkansas', CA: 'California',
   CO: 'Colorado', CT: 'Connecticut', DE: 'Delaware', FL: 'Florida', GA: 'Georgia',
   HI: 'Hawaii', ID: 'Idaho', IL: 'Illinois', IN: 'Indiana', IA: 'Iowa',
@@ -224,11 +225,11 @@ export default function ProfileForm({
           if (c.audition_location!.includes(code)) counts.set(code, (counts.get(code) ?? 0) + 1)
         })
       })
-      setStateOptions(
-        Array.from(counts.entries())
-          .sort((a, b) => b[1] - a[1])
-          .map(([code, count]) => ({ code, name: STATE_NAMES[code], count })),
-      )
+      const stateList = Array.from(counts.entries())
+        .filter(([code]) => code !== 'Remote')
+        .sort((a, b) => b[1] - a[1])
+        .map(([code, count]) => ({ code, name: STATE_NAMES[code], count }))
+      setStateOptions([{ code: 'Remote', name: 'Remote / Video', count: 0 }, ...stateList])
     }).catch(() => {})
   }, [])
 
@@ -389,7 +390,7 @@ export default function ProfileForm({
             <div className="flex flex-wrap gap-2">
               {stateOptions.map((s) => (
                 <button key={s.code} type="button" onClick={() => toggleState(s.code)} className={stateBtn(s.code)}>
-                  {s.code}
+                  {s.code === 'Remote' ? 'Video' : s.code}
                 </button>
               ))}
             </div>
