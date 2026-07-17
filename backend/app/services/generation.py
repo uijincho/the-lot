@@ -1,13 +1,13 @@
 from typing import List, Optional
 
-import anthropic
+from openai import AsyncOpenAI
 
 from app.core.config import settings
 from app.schemas.chat import UserContext
 
-client = anthropic.AsyncAnthropic(api_key=settings.anthropic_api_key)
+client = AsyncOpenAI(api_key=settings.openai_api_key)
 
-MODEL = "claude-sonnet-5"
+MODEL = "gpt-4o-mini"
 
 SYSTEM_PROMPT = """You are an expert assistant for Drum Corps International (DCI) audition candidates.
 You have deep knowledge of DCI corps, audition processes, marching technique, musical preparation, physical conditioning, and the overall member experience.
@@ -55,10 +55,12 @@ async def generate_answer(
 
     parts.append(f"**Question:** {question}")
 
-    message = await client.messages.create(
+    response = await client.chat.completions.create(
         model=MODEL,
         max_tokens=1024,
-        system=SYSTEM_PROMPT,
-        messages=[{"role": "user", "content": "\n\n".join(parts)}],
+        messages=[
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": "\n\n".join(parts)},
+        ],
     )
-    return message.content[0].text
+    return response.choices[0].message.content
