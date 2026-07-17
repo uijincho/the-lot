@@ -1,6 +1,6 @@
 # The Lot
 
-An AI-powered audition assistant for Drum Corps International (DCI) candidates. Ask questions about corps audition requirements, dates, and expectations — and get accurate, source-backed answers.
+An AI-powered audition hub for Drum Corps International (DCI) candidates. Browse corps, find audition dates, get personalized recommendations, and ask questions — all in one place.
 
 Named after *the lot* — the iconic warm-up space at DCI events where members and fans gather before and after shows.
 
@@ -8,15 +8,27 @@ Named after *the lot* — the iconic warm-up space at DCI events where members a
 
 ## Features
 
-- **Personalized Onboarding** — New visitors enter their name, instrument, age, experience level (rookie or experienced), and which states they'd travel to audition in. Stored in a browser cookie for 365 days.
-- **Corps History** — Experienced marchers can search and log every corps they've marched with the year, surfaced on their profile.
-- **Smart Dashboard** — Corps cards or list rows filtered by the user's selected states and ranked by instrument match, with a "Recommended for You" badge. World Class and Open Class corps are shown in separate labeled sections.
-- **Card / List View Toggle** — Switch between a card grid and a compact list layout from the filter bar.
-- **State Filter** — Shows the top 3 states by corps count by default; expandable to the full alphabetical list.
-- **Lucas — Floating Chat Widget** — A collapsible bottom-right chat panel powered by Claude. Answers audition questions in context with the user's profile.
-- **RAG Q&A** — Chat answers are grounded in real corps documents uploaded to the knowledge base.
-- **Document Ingestion** — Upload PDFs or text files to feed the knowledge base.
-- **Finals Night / Daylight Themes** — Dark and light themes with a full CSS variable token system. Persisted in `localStorage`; respects `prefers-color-scheme` on first visit. Toggle in the navbar.
+### For Candidates
+
+- **2026 Audition Dates** — Earliest announced audition date for every World Class corps, pulled from the official FloMarching schedule. Dates are shown on each corps card so you know when to start preparing.
+- **Personalized Recommendations** — Fill out your profile once (instrument, experience, states you'd travel to) and the dashboard ranks corps by how well they match you. Match percentage shown on every card.
+- **World Class & Open Class Sections** — Corps are split into clearly labeled divisions so you can browse the level that fits your goals.
+- **Corps History** — Experienced marchers can log every corps they've marched with and the year, surfaced on their profile.
+- **State Filter** — Filter corps by audition location. If you can only travel to Texas, you'll see which corps audition there.
+- **Card / List View** — Switch between a visual card grid and a compact list view depending on how you like to browse.
+
+### Lucas — AI Chat Assistant
+
+- **Ask anything about DCI** — Lucas is a floating chat widget powered by GPT-4o mini. Ask about audition prep, what to expect at camps, tour life, instrument-specific tips, or corps culture.
+- **Profile-aware answers** — If you've filled out your profile, Lucas personalizes responses to your instrument, experience level, corps history, and location.
+- **Document-grounded** — When corps documents have been uploaded to the knowledge base, Lucas answers from them directly and cites specific details.
+- **Persistent chat** — Conversation history is saved. Logged-in users sync across devices; guests persist in the browser.
+
+### Account & Profile
+
+- **Auth** — Sign up and log in to save your profile and chat history to the cloud.
+- **Onboarding** — First-time visitors are walked through a short setup: name, instrument, age, experience level, and which states they'd consider auditioning in.
+- **Editable Profile** — Update your details anytime on the Profile page. Changes immediately update your recommendations.
 
 ---
 
@@ -26,11 +38,11 @@ Named after *the lot* — the iconic warm-up space at DCI events where members a
 |---|---|
 | Frontend | React + TypeScript + Tailwind CSS (Vite) |
 | Backend | FastAPI (Python) |
-| Database | PostgreSQL + pgvector |
+| Database | PostgreSQL + pgvector (Railway) |
 | Embeddings | OpenAI `text-embedding-3-small` |
-| Generation | Anthropic Claude Sonnet 5 |
-| Storage | Browser cookies (365-day profile persistence) |
-| Fonts | Space Grotesk · Inter · IBM Plex Mono (Google Fonts) |
+| Generation | OpenAI `gpt-4o-mini` |
+| Hosting | Vercel (frontend) · Railway (backend + database) |
+| Fonts | Inter · Space Grotesk (Google Fonts) |
 
 ---
 
@@ -40,27 +52,27 @@ Named after *the lot* — the iconic warm-up space at DCI events where members a
 the-lot/
 ├── backend/
 │   ├── app/
-│   │   ├── api/routes/     # corps, chat, documents endpoints
+│   │   ├── api/routes/     # corps, chat, auth, documents, conversations
 │   │   ├── core/           # config, database
-│   │   ├── models/         # SQLAlchemy ORM models (Corps, Document, Chunk)
+│   │   ├── models/         # SQLAlchemy ORM models
 │   │   ├── schemas/        # Pydantic request/response schemas
 │   │   └── services/       # embeddings, vector store, generation, ingestion
-│   ├── seed.sql            # Full 40-corps seed (21 World Class, 19 Open Class)
+│   ├── seed.sql            # Full corps seed with 2026 audition dates
+│   ├── patch_audition_dates.sql  # Standalone patch to update live DB dates
 │   ├── requirements.txt
 │   └── .env.example
 └── frontend/
     └── src/
-        ├── components/     # layout, dashboard, chat, onboarding, profile
-        ├── context/        # UserProfileContext
-        ├── hooks/          # useUserProfile (cookie read/write)
+        ├── components/     # layout, dashboard, chat, auth, onboarding, profile
+        ├── context/        # AuthContext, ChatContext, UserProfileContext
         ├── pages/          # Dashboard, Chat, Profile
-        ├── lib/            # API client, geo utilities
+        ├── lib/            # API client, recommendation engine, geo utilities
         └── types/          # Corps, UserProfile, ChatMessage
 ```
 
 ---
 
-## Setup
+## Local Setup
 
 ### Prerequisites
 
@@ -68,40 +80,29 @@ the-lot/
 - Node.js 18+
 - Docker (for PostgreSQL with pgvector)
 - OpenAI API key
-- Anthropic API key
 
 ### Database
 
 ```bash
-# Start PostgreSQL with pgvector via Docker
 docker compose up -d
 ```
-
-The `pgvector` extension is enabled automatically on first migration.
 
 ### Backend
 
 ```bash
 cd backend
-
-# Create and activate virtual environment
 python3 -m venv .venv
 source .venv/bin/activate
-
-# Install dependencies
 pip install -r requirements.txt
 
-# Configure environment
 cp .env.example .env
-# Edit .env with your values
+# Edit .env — set DATABASE_URL, OPENAI_API_KEY, SECRET_KEY
 
-# Run database migrations
 alembic upgrade head
 
-# Seed sample corps data
+# Seed corps data (includes 2026 audition dates)
 docker exec -i the-lot-db-1 psql -U thelot -d thelot < seed.sql
 
-# Start the server
 uvicorn app.main:app --port 8001 --reload
 ```
 
@@ -121,33 +122,61 @@ Frontend runs at `http://localhost:5173`.
 
 ## Environment Variables
 
-Create `backend/.env` from `backend/.env.example`:
-
 ```
 DATABASE_URL=postgresql+asyncpg://thelot:thelot@localhost:5433/thelot
 OPENAI_API_KEY=sk-...
-ANTHROPIC_API_KEY=sk-ant-...
+SECRET_KEY=<random hex string>
 ```
+
+On Railway, also set `FRONTEND_URL` to your Vercel deployment URL.
 
 ---
 
-## Usage
+## Deployment
 
-1. **Visit the app** — the onboarding modal appears on first visit; fill in your instrument, experience level, and states, or skip
-2. **Browse the Dashboard** — World Class and Open Class corps shown in labeled sections; filter by state, class, or instrument match
-3. **Toggle view** — switch between card grid and compact list using the icons in the filter bar
-4. **Chat with Lucas** — use the floating widget (bottom-right) or the full Chat page to ask anything about audition requirements, repertoire, and expectations
-5. **Edit your profile** — update your details anytime on the Profile page
-6. **Ingest documents** — `POST /documents/upload` via `http://localhost:8001/docs` with a PDF or `.txt` file to add corps-specific knowledge
+- **Frontend** — deployed to [Vercel](https://vercel.com). `vercel.json` rewrites API calls to the Railway backend.
+- **Backend** — deployed to [Railway](https://railway.app) with root directory set to `backend/`. Uses `DATABASE_URL` with the `postgresql+asyncpg://` scheme.
+- **Database** — Railway managed PostgreSQL with the pgvector extension enabled.
+
+To update audition dates on the live database, run `backend/patch_audition_dates.sql` in Railway's Data → Query editor.
 
 ---
 
 ## API Endpoints
 
-| Method | Path | Description |
-|---|---|---|
-| `GET` | `/health` | Health check |
-| `GET` | `/corps` | List all corps |
-| `GET` | `/corps/{id}` | Single corps detail |
-| `POST` | `/chat` | RAG Q&A — `{"question": "..."}` |
-| `POST` | `/documents/upload` | Upload and ingest a PDF or .txt file |
+### Auth
+| Method | Path | Auth | Description |
+|---|---|---|---|
+| `POST` | `/auth/register` | — | Create account, returns JWT + user |
+| `POST` | `/auth/login` | — | Sign in, returns JWT + user |
+| `GET` | `/auth/me` | Required | Get current user + profile |
+| `PUT` | `/auth/me` | Required | Update profile (name, instruments, age, experience, states, corps history) |
+
+### Corps
+| Method | Path | Auth | Description |
+|---|---|---|---|
+| `GET` | `/corps` | — | List all corps |
+| `GET` | `/corps/{id}` | — | Single corps detail |
+
+### Chat
+| Method | Path | Auth | Description |
+|---|---|---|---|
+| `POST` | `/chat` | Optional | RAG Q&A — `{"question": "...", "user_context": {...}}` |
+
+### Conversations
+| Method | Path | Auth | Description |
+|---|---|---|---|
+| `GET` | `/conversations/current` | Required | Fetch saved chat history |
+| `DELETE` | `/conversations/current` | Required | Clear chat history |
+
+### Documents
+| Method | Path | Auth | Description |
+|---|---|---|---|
+| `POST` | `/documents/upload` | — | Upload a PDF or `.txt` file to the knowledge base |
+
+### Health
+| Method | Path | Auth | Description |
+|---|---|---|---|
+| `GET` | `/health` | — | Health check |
+
+Interactive docs available at `http://localhost:8001/docs`.
